@@ -1,11 +1,12 @@
 package http
 
 import (
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // Client implements Ignite HTTP REST API
