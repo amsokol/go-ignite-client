@@ -16,7 +16,6 @@ type stmt struct {
 // See https://golang.org/pkg/database/sql/driver/#Stmt for more details
 func (s *stmt) Close() error {
 	s.connection = nil
-	s.query = ""
 	return nil
 }
 
