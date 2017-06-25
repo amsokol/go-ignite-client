@@ -1,4 +1,4 @@
-# go-ignite-sql
+# go-ignite-client
 ## Apache Ignite (GridGain) go language native client and SQL driver
 
 
