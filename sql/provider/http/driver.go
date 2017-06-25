@@ -6,7 +6,6 @@ import (
 
 	"github.com/pkg/errors"
 
-	"fmt"
 	"github.com/amsokol/go-ignite-client/http"
 )
 
