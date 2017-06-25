@@ -3,6 +3,8 @@ package http
 import (
 	"context"
 	"database/sql/driver"
+
+	"github.com/pkg/errors"
 )
 
 // SQL statement struct
@@ -30,6 +32,9 @@ func (s *stmt) Exec(args []driver.Value) (driver.Result, error) {
 
 // See https://golang.org/pkg/database/sql/driver/#StmtExecContext for more details
 func (s *stmt) ExecContext(ctx context.Context, args []driver.NamedValue) (driver.Result, error) {
+	if s.connection == nil {
+		return nil, errors.WithStack(errors.New("Statement is closed"))
+	}
 	return s.connection.ExecContext(ctx, s.query, args)
 }
 
@@ -40,6 +45,9 @@ func (s *stmt) Query(args []driver.Value) (driver.Rows, error) {
 
 // See https://golang.org/pkg/database/sql/driver/#StmtQueryContext for more details
 func (s *stmt) QueryContext(ctx context.Context, args []driver.NamedValue) (driver.Rows, error) {
+	if s.connection == nil {
+		return nil, errors.WithStack(errors.New("Statement is closed"))
+	}
 	return s.connection.QueryContext(ctx, s.query, args)
 }
 
