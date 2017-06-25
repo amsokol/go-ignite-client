@@ -23,11 +23,11 @@ func (c *Client) QryFldExe(query string, v url.Values) (*Response, string, error
 	r := WrapperResponse{}
 	err = json.Unmarshal(b, &r)
 	if err != nil {
-		return nil, "", errors.WithStack(errors.Wrap(err, "Can't unmarshal respone to WrapperResponse"))
+		return nil, "", errors.Wrap(err, "Can't unmarshal respone to WrapperResponse")
 	}
 
 	if r.SuccessStatus != successStatusSuccess {
-		return nil, "", errors.WithStack(errors.New(c.getError(r.SuccessStatus, r.Error)))
+		return nil, "", errors.New(c.getError(r.SuccessStatus, r.Error))
 	}
 
 	return &r.Response, r.SessionToken, nil

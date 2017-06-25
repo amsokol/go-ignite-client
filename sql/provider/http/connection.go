@@ -144,7 +144,7 @@ func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (url.Values, error
 		for _, nv := range nvs {
 			if nv.Ordinal == i {
 				if nv.Value == nil {
-					return nil, errors.WithStack(errors.New("Ignite HTTP REST API does not support NULL as parameter"))
+					return nil, errors.New("Ignite HTTP REST API does not support NULL as parameter")
 				}
 				var av string
 				switch v := nv.Value.(type) {
@@ -167,7 +167,7 @@ func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (url.Values, error
 				// TODO: add binary support
 				// TODO: add time.Time support
 				default:
-					return nil, errors.WithStack(errors.New(strings.Join([]string{"Unsupported parameter type with index", strconv.Itoa(i)}, " ")))
+					return nil, errors.New(strings.Join([]string{"Unsupported parameter type with index", strconv.Itoa(i)}, " "))
 				}
 				vs.Add(strings.Join([]string{"arg", strconv.Itoa(i)}, ""), av)
 				break

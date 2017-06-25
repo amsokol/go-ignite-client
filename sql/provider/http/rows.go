@@ -60,7 +60,7 @@ func (r *rows) Close() (err error) {
 // See https://golang.org/pkg/database/sql/driver/#Rows for more details
 func (r *rows) Next(dest []driver.Value) error {
 	if r.connection == nil {
-		return errors.WithStack(errors.New("Rows are closed"))
+		return errors.New("Rows are closed")
 	}
 
 	if r.index >= r.size {
@@ -101,7 +101,7 @@ func (r *rows) setResultSet(items [][]interface{}) error {
 	cl := len(r.columns)
 	for i, item := range items {
 		if cl != len(item) {
-			return errors.WithStack(errors.New("Very strange situation - column count and count of values in row are different"))
+			return errors.New("Very strange situation - column count and count of values in row are different")
 		}
 		row := make([]driver.Value, cl, cl)
 		for j, v := range item {
@@ -128,7 +128,7 @@ func (r *rows) setResultSet(items [][]interface{}) error {
 			// TODO: add binary support
 			// TODO: add time.Time support
 			default:
-				return errors.WithStack(errors.New(strings.Join([]string{"Unsupported parameter type", t}, ": ")))
+				return errors.New(strings.Join([]string{"Unsupported parameter type", t}, ": "))
 			}
 			if err != nil {
 				return errors.Wrap(err, strings.Join([]string{"Failed to convert Ignite type to golang type", t}, ": "))

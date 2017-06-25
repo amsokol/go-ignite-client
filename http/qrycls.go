@@ -22,11 +22,11 @@ func (c *Client) QryCls(queryID string) (bool, string, error) {
 	r := WrapperResponseBinary{}
 	err = json.Unmarshal(b, &r)
 	if err != nil {
-		return false, "", errors.WithStack(errors.Wrap(err, "Can't unmarshal respone to WrapperBinaryResponse"))
+		return false, "", errors.Wrap(err, "Can't unmarshal respone to WrapperBinaryResponse")
 	}
 
 	if r.SuccessStatus != successStatusSuccess {
-		return false, "", errors.WithStack(errors.New(c.getError(r.SuccessStatus, r.Error)))
+		return false, "", errors.New(c.getError(r.SuccessStatus, r.Error))
 	}
 
 	return r.Response, r.SessionToken, nil

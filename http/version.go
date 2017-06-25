@@ -20,7 +20,7 @@ func (c *Client) Version() (Version, string, error) {
 	r := WrapperResponseVersion{}
 	err = json.Unmarshal(b, &r)
 	if err != nil {
-		return "", "", errors.WithStack(errors.Wrap(err, "Can't unmarshal respone to WrapperResponseVersion"))
+		return "", "", errors.Wrap(err, "Can't unmarshal respone to WrapperResponseVersion")
 	}
 
 	if r.SuccessStatus != successStatusSuccess {
