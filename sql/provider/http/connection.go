@@ -128,7 +128,7 @@ func (c *conn) closeQueryContext(ctx context.Context, queryID string) error {
 }
 
 // namedValues2UrlValues converts SQL parameters to HTTP request parameters
-func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (*url.Values, error) {
+func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (url.Values, error) {
 	vs := url.Values{}
 
 	l := len(nvs)
@@ -166,5 +166,5 @@ func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (*url.Values, erro
 			}
 		}
 	}
-	return &vs, nil
+	return vs, nil
 }

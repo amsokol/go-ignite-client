@@ -34,7 +34,6 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 		// set default value 1000
 		ci.PageSize = 1000
 	}
-	ci.PageSizeStr = fmt.Sprintf("%d", ci.PageSize)
 
 	c := &http.Client{ConnectionInfo: &ci}
 

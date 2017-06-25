@@ -4,15 +4,16 @@ import (
 	"encoding/json"
 	"github.com/pkg/errors"
 	"net/url"
+	"strconv"
 )
 
 // QryFldExe runs sql fields query over cache.
 // See https://apacheignite.readme.io/docs/rest-api#section-sql-fields-query-execute for more details
-func (c *Client) QryFldExe(query string, v *url.Values) (*Response, string, error) {
+func (c *Client) QryFldExe(query string, v url.Values) (*Response, string, error) {
 	v.Add("cmd", "qryfldexe")
 	v.Add("cacheName", c.ConnectionInfo.Cache)
 	v.Add("qry", query)
-	v.Add("pageSize", c.ConnectionInfo.PageSizeStr)
+	v.Add("pageSize", strconv.FormatInt(c.ConnectionInfo.PageSize, 10))
 
 	b, err := c.execute(v)
 	if err != nil {

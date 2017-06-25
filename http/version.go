@@ -12,7 +12,7 @@ func (c *Client) Version() (Version, string, error) {
 	v := url.Values{}
 	v.Add("cmd", "version")
 
-	b, err := c.execute(&v)
+	b, err := c.execute(v)
 	if err != nil {
 		return "", "", err
 	}

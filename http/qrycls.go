@@ -14,7 +14,7 @@ func (c *Client) QryCls(queryID string) (bool, string, error) {
 	v.Add("cmd", "qrycls")
 	v.Add("qryId", queryID)
 
-	b, err := c.execute(&v)
+	b, err := c.execute(v)
 	if err != nil {
 		return false, "", err
 	}

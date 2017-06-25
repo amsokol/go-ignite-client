@@ -14,12 +14,11 @@ var successStatusMsg = []string{"success", "failed", "authorization failed", "se
 
 // ConnectionInfo contains Ignite cluster connection information user should provide when open connection
 type ConnectionInfo struct {
-	Servers     []string `json:"servers"`
-	Username    string   `json:"username"`
-	Password    string   `json:"password"`
-	Cache       string   `json:"cache"`
-	PageSize    int64    `json:"pageSize"`
-	PageSizeStr string
+	Servers  []string `json:"servers"`
+	Username string   `json:"username"`
+	Password string   `json:"password"`
+	Cache    string   `json:"cache"`
+	PageSize int64    `json:"pageSize"`
 }
 
 // WrapperResponseVersion is response for `version` command

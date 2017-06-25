@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"net/url"
+	"strconv"
 
 	"github.com/pkg/errors"
 )
@@ -13,9 +14,9 @@ func (c *Client) QryFetch(queryID string) (*Response, string, error) {
 	v := url.Values{}
 	v.Add("cmd", "qryfetch")
 	v.Add("qryId", queryID)
-	v.Add("pageSize", c.ConnectionInfo.PageSizeStr)
+	v.Add("pageSize", strconv.FormatInt(c.ConnectionInfo.PageSize, 10))
 
-	b, err := c.execute(&v)
+	b, err := c.execute(v)
 	if err != nil {
 		return nil, "", err
 	}

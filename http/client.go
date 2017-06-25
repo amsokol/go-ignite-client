@@ -14,7 +14,7 @@ type Client struct {
 }
 
 // execute invoke HTTP POST request and return response or error
-func (c *Client) execute(v *url.Values) ([]byte, error) {
+func (c *Client) execute(v url.Values) ([]byte, error) {
 	// TODO: add round-robin to select node
 	req, err := http.NewRequest("POST", c.ConnectionInfo.Servers[0], strings.NewReader(v.Encode()))
 	if err != nil {
