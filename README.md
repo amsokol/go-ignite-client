@@ -62,7 +62,7 @@ import (
 
 func main() {
 	db, err := sql.Open("ignite-sql-http",
-		`{"servers" : ["http://localhost:8080/ignite"], "cache" : "Person", "pageSize" : 10}`)
+		`{"servers" : ["http://localhost:8080/ignite"], "username" : "Peter", "password" : "myPassw0rd", "cache" : "Person", "pageSize" : 10}`)
 	if err != nil {
 		log.Fatal(err)
 	}
