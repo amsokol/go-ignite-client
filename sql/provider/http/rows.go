@@ -60,7 +60,7 @@ func (r *rows) Close() (err error) {
 // See https://golang.org/pkg/database/sql/driver/#Rows for more details
 func (r *rows) Next(dest []driver.Value) error {
 	if r.connection == nil {
-		errors.New("Rows are closed")
+		return errors.WithStack(errors.New("Rows are closed"))
 	}
 
 	if r.index >= r.size {
