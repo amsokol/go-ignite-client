@@ -8,7 +8,7 @@ Roadmap:
 1. Develop SQL driver ("ignite-sql-http") based on Apache Ignite HTTP REST API (In progress)
 2. Develop SQL driver ("ignite-sql-native") based on native Apache Ignite protocol (Not started)
 
-Example #1 (INSERT) how to use:
+Example #1 (INSERT):
 ```go
 package main
 
@@ -44,7 +44,7 @@ func main() {
 }
 ```
 
-Example #2 (SELECT) how to use:
+Example #2 (SELECT):
 ```go
 package main
 
