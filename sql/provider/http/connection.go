@@ -50,6 +50,10 @@ func (c *conn) Begin() (driver.Tx, error) {
 
 // See https://golang.org/pkg/database/sql/driver/#StmtExecContext for more details
 func (c *conn) ExecContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Result, error) {
+	if c.client == nil {
+		return nil, driver.ErrBadConn
+	}
+
 	v, err := c.namedValues2UrlValues(args)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed convert parameters for REST API")
@@ -65,6 +69,10 @@ func (c *conn) ExecContext(ctx context.Context, query string, args []driver.Name
 
 // See https://golang.org/pkg/database/sql/driver/#Pinger for more details
 func (c *conn) Ping(ctx context.Context) error {
+	if c.client == nil {
+		return driver.ErrBadConn
+	}
+
 	_, _, err := c.client.Version()
 	return err
 }
