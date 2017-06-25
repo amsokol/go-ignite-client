@@ -25,20 +25,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = stmt.Exec("66", "Microsoft66")
+	_, err = stmt.Exec("111", "Sample Org")
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	/*
-		lastID, err := res.LastInsertId()
-		if err != nil {
-			log.Fatal(err)
-		}
-		rowCnt, err := res.RowsAffected()
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Printf("ID = %d, affected = %d\n", lastID, rowCnt)
-	*/
 }
