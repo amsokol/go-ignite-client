@@ -39,7 +39,7 @@ func (c *conn) Close() error {
 
 // See https://golang.org/pkg/database/sql/driver/#ConnBeginTx for more details
 func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, error) {
-	return nil, nil
+	return nil, errors.New("Ignite REST API does not support transactions")
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn
