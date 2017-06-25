@@ -11,14 +11,16 @@ import (
 	"github.com/pkg/errors"
 )
 
+// SQL column struct
 type column struct {
 	name       string
 	igniteType string
 }
 
+// SQL rows struct
 type rows struct {
 	connection *conn
-	queryId    string
+	queryID    string
 	last       bool
 	columns    []column
 	resultSet  [][]driver.Value
@@ -46,12 +48,12 @@ func (r *rows) ColumnTypeDatabaseTypeName(index int) string {
 
 // See https://golang.org/pkg/database/sql/driver/#Rows for more details
 func (r *rows) Close() (err error) {
-	if r.connection != nil && len(r.queryId) > 0 {
-		err = r.connection.closeQueryContext(context.Background(), r.queryId)
+	if r.connection != nil && len(r.queryID) > 0 {
+		err = r.connection.closeQueryContext(context.Background(), r.queryID)
 	}
 
 	r.connection = nil
-	r.queryId = ""
+	r.queryID = ""
 	return err
 }
 
@@ -65,7 +67,7 @@ func (r *rows) Next(dest []driver.Value) error {
 		if r.last {
 			return io.EOF
 		}
-		items, last, err := r.connection.fetchContext(context.Background(), r.queryId)
+		items, last, err := r.connection.fetchContext(context.Background(), r.queryID)
 		if err != nil {
 			return errors.Wrap(err, "Failed to get next page for the query")
 		}
@@ -91,6 +93,7 @@ func (r *rows) Next(dest []driver.Value) error {
 	return nil
 }
 
+// setResultSet sets rows result set
 func (r *rows) setResultSet(items [][]interface{}) error {
 	il := len(items)
 	rs := make([][]driver.Value, il, il)

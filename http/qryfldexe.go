@@ -7,6 +7,7 @@ import (
 )
 
 // QryFldExe runs sql fields query over cache.
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-fields-query-execute for more details
 func (c *Client) QryFldExe(query string, v *url.Values) (*Response, string, error) {
 	v.Add("cmd", "qryfldexe")
 	v.Add("cacheName", c.ConnectionInfo.Cache)

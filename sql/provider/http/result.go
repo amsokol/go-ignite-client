@@ -4,15 +4,16 @@ import (
 	"github.com/pkg/errors"
 )
 
+// SQL result struct
 type result struct {
-	lastInsertId int64
-	rowsAffected int64
 }
 
+// See https://golang.org/pkg/database/sql/driver/#Result for more details
 func (r *result) LastInsertId() (int64, error) {
 	return -1, errors.WithStack(errors.New("Ignite HTTP REST API does not support LastInsertId"))
 }
 
+// See https://golang.org/pkg/database/sql/driver/#Result for more details
 func (r *result) RowsAffected() (int64, error) {
 	return -1, errors.WithStack(errors.New("Ignite HTTP REST API does not support RowsAffected"))
 }

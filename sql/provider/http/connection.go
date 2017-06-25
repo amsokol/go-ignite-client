@@ -13,6 +13,7 @@ import (
 	"github.com/amsokol/go-ignite-client/http"
 )
 
+// SQL connection struct
 type conn struct {
 	client *http.Client
 }
@@ -47,6 +48,7 @@ func (c *conn) Begin() (driver.Tx, error) {
 	return c.BeginTx(nil, driver.TxOptions{})
 }
 
+// See https://golang.org/pkg/database/sql/driver/#StmtExecContext for more details
 func (c *conn) ExecContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Result, error) {
 	v, err := c.namedValues2UrlValues(args)
 	if err != nil {
@@ -61,11 +63,13 @@ func (c *conn) ExecContext(ctx context.Context, query string, args []driver.Name
 	return &result{}, nil
 }
 
+// See https://golang.org/pkg/database/sql/driver/#Pinger for more details
 func (c *conn) Ping(ctx context.Context) error {
 	_, _, err := c.client.Version()
 	return err
 }
 
+// See https://golang.org/pkg/database/sql/driver/#QueryerContext for more details
 func (c *conn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
 	if c.client == nil {
 		return nil, driver.ErrBadConn
@@ -82,7 +86,7 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 	}
 
 	cl := len(r.FieldsMetadata)
-	rows := rows{connection: c, queryId: fmt.Sprintf("%d", r.QueryID), last: r.Last, columns: make([]column, cl, cl)}
+	rows := rows{connection: c, queryID: fmt.Sprintf("%d", r.QueryID), last: r.Last, columns: make([]column, cl, cl)}
 
 	// columns
 	for i, c := range r.FieldsMetadata {
@@ -98,12 +102,13 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 	return &rows, nil
 }
 
-func (c *conn) fetchContext(ctx context.Context, queryId string) ([][]interface{}, bool, error) {
+// fetchContext gets next page for the query
+func (c *conn) fetchContext(ctx context.Context, queryID string) ([][]interface{}, bool, error) {
 	if c.client == nil {
 		return nil, false, driver.ErrBadConn
 	}
 
-	r, _, err := c.client.QryFetch(queryId)
+	r, _, err := c.client.QryFetch(queryID)
 	if err != nil {
 		return nil, false, errors.Wrap(err, "Failed to invoke 'qryfldexe' command")
 	}
@@ -111,16 +116,18 @@ func (c *conn) fetchContext(ctx context.Context, queryId string) ([][]interface{
 	return r.Items, r.Last, nil
 }
 
-func (c *conn) closeQueryContext(ctx context.Context, queryId string) error {
+// closeQueryContext closes query resources
+func (c *conn) closeQueryContext(ctx context.Context, queryID string) error {
 	if c.client == nil {
 		return driver.ErrBadConn
 	}
 
-	_, _, err := c.client.QryCls(queryId)
+	_, _, err := c.client.QryCls(queryID)
 
 	return err
 }
 
+// namedValues2UrlValues converts SQL parameters to HTTP request parameters
 func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (*url.Values, error) {
 	vs := url.Values{}
 

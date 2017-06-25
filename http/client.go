@@ -8,11 +8,12 @@ import (
 	"strings"
 )
 
-// Client contains Ignite cluster connection information
+// Client implements Ignite HTTP REST API
 type Client struct {
 	ConnectionInfo *ConnectionInfo
 }
 
+// execute invoke HTTP POST request and return response or error
 func (c *Client) execute(v *url.Values) ([]byte, error) {
 	// TODO: add round-robin to select node
 	req, err := http.NewRequest("POST", c.ConnectionInfo.Servers[0], strings.NewReader(v.Encode()))
@@ -35,6 +36,7 @@ func (c *Client) execute(v *url.Values) ([]byte, error) {
 	return b, err
 }
 
+// getError return Ignite error message
 func (c *Client) getError(code int, str string) string {
 	if code < successStatusSuccess || successStatusSecurityCheckFailed < code {
 		code = successStatusUnknown

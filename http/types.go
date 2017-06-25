@@ -1,5 +1,6 @@
 package http
 
+// See https://apacheignite.readme.io/docs/rest-api#section-returned-value for more details
 const (
 	successStatusSuccess             = 0
 	successStatusFailed              = 1
@@ -8,9 +9,10 @@ const (
 	successStatusUnknown             = 4
 )
 
+// See https://apacheignite.readme.io/docs/rest-api#section-returned-value for more details
 var successStatusMsg = []string{"success", "failed", "authorization failed", "security check failed", "unknown status"}
 
-// ConnectionInfo contains Ignite cluster connection information
+// ConnectionInfo contains Ignite cluster connection information user should provide when open connection
 type ConnectionInfo struct {
 	Servers     []string `json:"servers"`
 	Username    string   `json:"username"`
@@ -20,6 +22,8 @@ type ConnectionInfo struct {
 	PageSizeStr string
 }
 
+// WrapperResponseVersion is response for `version` command
+// See https://apacheignite.readme.io/docs/rest-api#section-version for more details
 type WrapperResponseVersion struct {
 	SuccessStatus int     `json:"successStatus"`
 	Error         string  `json:"error"`
@@ -27,8 +31,12 @@ type WrapperResponseVersion struct {
 	SessionToken  string  `json:"sessionToken"`
 }
 
+// Version is alias for `string`
 type Version string
 
+// WrapperResponse is response for `qryfldexe`, `qryfetch` commands
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-fields-query-execute for more details
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-query-fetch for more details
 type WrapperResponse struct {
 	SuccessStatus int      `json:"successStatus"`
 	Error         string   `json:"error"`
@@ -36,6 +44,9 @@ type WrapperResponse struct {
 	SessionToken  string   `json:"sessionToken"`
 }
 
+// Response is body of response for `qryfldexe`, `qryfetch` commands
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-fields-query-execute for more details
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-query-fetch for more details
 type Response struct {
 	Items          [][]interface{} `json:"items"`
 	Last           bool            `json:"last"`
@@ -43,6 +54,9 @@ type Response struct {
 	FieldsMetadata []FieldMetadata `json:"fieldsMetadata"`
 }
 
+// FieldMetadata is column list
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-fields-query-execute for more details
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-query-fetch for more details
 type FieldMetadata struct {
 	SchemaName    string `json:"schemaName"`
 	TypeName      string `json:"typeName"`
@@ -50,6 +64,8 @@ type FieldMetadata struct {
 	FieldTypeName string `json:"fieldTypeName"`
 }
 
+// WrapperResponseBinary is response for `qrycls` commands
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-query-close for more details
 type WrapperResponseBinary struct {
 	SuccessStatus int    `json:"successStatus"`
 	Error         string `json:"error"`

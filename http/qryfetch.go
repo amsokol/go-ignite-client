@@ -8,10 +8,11 @@ import (
 )
 
 // QryFetch gets next page for the query
-func (c *Client) QryFetch(queryId string) (*Response, string, error) {
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-query-fetch for more details
+func (c *Client) QryFetch(queryID string) (*Response, string, error) {
 	v := url.Values{}
 	v.Add("cmd", "qryfetch")
-	v.Add("qryId", queryId)
+	v.Add("qryId", queryID)
 	v.Add("pageSize", c.ConnectionInfo.PageSizeStr)
 
 	b, err := c.execute(&v)

@@ -7,11 +7,7 @@ import (
 )
 
 // Version command shows current Ignite version.
-//
-// Request Parameters
-// | name | type   | optional | description                  | example |
-// |------|--------|----------|------------------------------|---------|
-// | cmd  | string |          | Should be version lowercase. |         |
+// See https://apacheignite.readme.io/docs/rest-api#section-version for more details
 func (c *Client) Version() (Version, string, error) {
 	v := url.Values{}
 	v.Add("cmd", "version")

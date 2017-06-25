@@ -8,10 +8,11 @@ import (
 )
 
 // QryCls closes query resources
-func (c *Client) QryCls(queryId string) (bool, string, error) {
+// See https://apacheignite.readme.io/docs/rest-api#section-sql-query-close for more details
+func (c *Client) QryCls(queryID string) (bool, string, error) {
 	v := url.Values{}
 	v.Add("cmd", "qrycls")
-	v.Add("qryId", queryId)
+	v.Add("qryId", queryID)
 
 	b, err := c.execute(&v)
 	if err != nil {
