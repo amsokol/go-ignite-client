@@ -1,6 +1,8 @@
 # go-ignite-client
 ## Apache Ignite (GridGain) go language native client and SQL driver
-
+```
+go get -u github.com/amsokol/go-ignite-client
+```
 
 Roadmap:
 1. Develop SQL driver ("ignite-sql-http") based on Apache Ignite HTTP REST API (In progress)
