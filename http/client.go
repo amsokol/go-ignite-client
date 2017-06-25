@@ -27,6 +27,10 @@ func (c *Client) execute(v *url.Values) ([]byte, error) {
 		return nil, errors.Wrap(err, "Can't Do HTTP request by DefaultClient")
 	}
 
+	if len(c.ConnectionInfo.Username) > 0 {
+		req.SetBasicAuth(c.ConnectionInfo.Username, c.ConnectionInfo.Password)
+	}
+
 	b, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
