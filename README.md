@@ -1,5 +1,5 @@
 # go-ignite-client
-## Apache Ignite (GridGain) go language native client and SQL driver
+## Apache Ignite (GridGain) go(1.8+) language native client and SQL driver
 ```
 go get -u github.com/amsokol/go-ignite-client/sql
 ```
