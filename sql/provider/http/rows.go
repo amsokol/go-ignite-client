@@ -1,13 +1,13 @@
 package http
 
 import (
+	"context"
 	"database/sql/driver"
 	"fmt"
 	"io"
 	"strconv"
 	"strings"
 
-	"context"
 	"github.com/pkg/errors"
 )
 
