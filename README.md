@@ -5,8 +5,13 @@ go get -u github.com/amsokol/go-ignite-client/sql
 ```
 
 Roadmap:
-1. Develop SQL driver ("ignite-sql-http") based on Apache Ignite HTTP REST API (In progress)
-2. Develop SQL driver ("ignite-sql-native") based on native Apache Ignite protocol (Not started)
+1. Develop SQL driver (`ignite-sql-http`) based on Apache Ignite HTTP REST API (In progress)
+2. Develop SQL driver (`ignite-sql-native`) based on native Apache Ignite protocol (Not started)
+
+Issues:
+- `ignite-sql-http` SQL driver does not support transactions (Ignite HTTP REST API does not support transactions)
+- Fields with type Time and Date are not supported yet (will be fixed soon)
+- Fields with type Binary are not supported yet (will be fixed soon)
 
 Example #1 (INSERT):
 ```go
