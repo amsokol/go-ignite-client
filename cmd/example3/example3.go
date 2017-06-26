@@ -9,6 +9,7 @@ import (
 
 func main() {
 	db, err := sql.Open("ignite-sql-http", `{
+		"version" : 1.0,
 		"servers" : ["http://localhost:8081/ignite", "http://localhost:8080/ignite"],
 		"username" : "login",
 		"password" : "password",

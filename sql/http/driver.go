@@ -4,15 +4,16 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
+	"strconv"
 	"strings"
 
 	"github.com/pkg/errors"
 
-	"github.com/amsokol/go-ignite-client/http"
 	"github.com/amsokol/go-ignite-client/sql/http/v1"
 )
 
 type connectionInfo struct {
+	Version    float64  `json:"version"`
 	Servers    []string `json:"servers"`
 	Username   string   `json:"username"`
 	Password   string   `json:"password"`
@@ -51,19 +52,20 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 		ci.Quarantine = 30
 	}
 
-	ver, err := http.Version(ci.Servers, ci.Quarantine, ci.Username, ci.Password)
-	if err != nil {
-		return nil, errors.Wrap(err, "Failed to get HTTP REST API version")
+	if ci.Version == 0 {
+		// set default version is 1.0
+		ci.Version = 1.0
 	}
 
 	var conn driver.Conn
-	switch ver.Major {
+	switch ci.Version {
 	case 1:
 		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	case 2:
 		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	default:
-		return nil, errors.Wrap(err, strings.Join([]string{"Unsupported HTTP REST API version v", ver.String()}, ""))
+		return nil, errors.New(strings.Join([]string{"Unsupported HTTP REST API version v",
+			strconv.FormatFloat(ci.Version, 'f', -1, 64), ". Supported versions are \"1\" and \"2\""}, ""))
 	}
 
 	return conn, nil
