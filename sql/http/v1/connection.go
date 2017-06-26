@@ -1,4 +1,4 @@
-package http
+package v1
 
 import (
 	"context"
@@ -10,12 +10,20 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/amsokol/go-ignite-client/http"
+	"github.com/amsokol/go-ignite-client/http/v1"
+	"github.com/amsokol/go-ignite-client/sql"
 )
 
 // SQL connection struct
 type conn struct {
-	client *http.Client
+	client   v1.Client
+	cache    string
+	pageSize int64
+}
+
+// Open returns connection
+func Open(servers []string, username string, password string, cache string, pageSize int64) sql.Conn {
+	return &conn{cache: cache, pageSize: pageSize, client: v1.Open(servers, username, password)}
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn for more details
@@ -28,7 +36,7 @@ func (c *conn) PrepareContext(ctx context.Context, query string) (driver.Stmt, e
 	if c.client == nil {
 		return nil, driver.ErrBadConn
 	}
-	return c.getStmt(query), nil
+	return &sql.Stmt{Connection: c, QueryExp: query}, nil
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn for more details
@@ -59,12 +67,12 @@ func (c *conn) ExecContext(ctx context.Context, query string, args []driver.Name
 		return nil, errors.Wrap(err, "Failed convert parameters for REST API")
 	}
 
-	_, _, err = c.client.QryFldExe(query, v)
+	_, _, err = c.client.SQLFieldsQueryExecute(c.cache, c.pageSize, query, v)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to invoke 'qryfldexe' command")
 	}
 
-	return c.getResult(), nil
+	return &result{}, nil
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Pinger for more details
@@ -73,7 +81,7 @@ func (c *conn) Ping(ctx context.Context) error {
 		return driver.ErrBadConn
 	}
 
-	_, _, err := c.client.Version()
+	_, _, err := c.client.GetVersion()
 	return err
 }
 
@@ -88,54 +96,57 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 		return nil, errors.Wrap(err, "Failed convert parameters for REST API 'qryfldexe' command")
 	}
 
-	res, _, err := c.client.QryFldExe(query, v)
+	res, _, err := c.client.SQLFieldsQueryExecute(c.cache, c.pageSize, query, v)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to invoke 'qryfldexe' command")
 	}
 
 	// columns
-	colcount := len(res.FieldsMetadata)
-	columns := make([]column, colcount, colcount)
-	for i, c := range res.FieldsMetadata {
-		columns[i] = column{name: c.FieldName, serverType: c.FieldTypeName}
+	colcount := len(res.GetFieldsMetadata())
+	columns := make([]sql.Column, colcount, colcount)
+	for i, c := range res.GetFieldsMetadata() {
+		columns[i] = sql.Column{Name: c.GetFieldName(), ServerType: c.GetFieldTypeName()}
 	}
 
 	// data
-	data, err := c.items2Values(columns, res.Items)
+	data, err := c.items2Values(columns, res.GetItems())
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed extract values from 'qryfldexe' response")
 	}
 
-	return c.getRows(columns, strconv.FormatInt(res.QueryID, 10), c.getResultSet(data, res.Last)), nil
+	return &sql.Rows{Connection: c,
+		ColumnsRaw: columns,
+		QueryID:    strconv.FormatInt(res.GetQueryID(), 10),
+		ResultSet:  c.getResultSet(data, res.GetLast())}, nil
 }
 
 // fetchContext gets next page for the query
-func (c *conn) fetchContext(ctx context.Context, queryID string, columns []column) (*resultSet, error) {
+func (c *conn) FetchContext(ctx context.Context, queryID string, columns []sql.Column) (*sql.ResultSet, error) {
 	if c.client == nil {
 		return nil, driver.ErrBadConn
 	}
 
-	res, _, err := c.client.QryFetch(queryID)
+	res, _, err := c.client.SQLQueryFetch(c.pageSize, queryID)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to invoke 'qryfetch' command")
 	}
 
 	// data
-	data, err := c.items2Values(columns, res.Items)
+	data, err := c.items2Values(columns, res.GetItems())
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed extract values from 'qryfetch' response")
 	}
 
-	return c.getResultSet(data, res.Last), nil
+	return c.getResultSet(data, res.GetLast()), nil
 }
 
 // closeQueryContext closes query resources
-func (c *conn) closeQueryContext(ctx context.Context, queryID string) error {
+func (c *conn) CloseQueryContext(ctx context.Context, queryID string) error {
 	if c.client == nil {
 		return driver.ErrBadConn
 	}
 
-	_, _, err := c.client.QryCls(queryID)
+	_, _, err := c.client.SQLQueryClose(queryID)
 
 	return err
 }
@@ -183,7 +194,7 @@ func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (url.Values, error
 }
 
 // setResultSet sets rows result set
-func (c *conn) items2Values(columns []column, items [][]interface{}) ([][]driver.Value, error) {
+func (c *conn) items2Values(columns []sql.Column, items [][]interface{}) ([][]driver.Value, error) {
 	size := len(items)
 	data := make([][]driver.Value, size, size)
 
@@ -196,7 +207,7 @@ func (c *conn) items2Values(columns []column, items [][]interface{}) ([][]driver
 		for j, v := range item {
 			var err error
 			sv := fmt.Sprint(v)
-			t := columns[j].serverType
+			t := columns[j].ServerType
 			switch t {
 			case "java.lang.Byte":
 				row[j], err = strconv.ParseInt(sv, 10, 8)
@@ -229,21 +240,9 @@ func (c *conn) items2Values(columns []column, items [][]interface{}) ([][]driver
 	return data, nil
 }
 
-func (c *conn) getResultSet(data [][]driver.Value, last bool) *resultSet {
+func (c *conn) getResultSet(data [][]driver.Value, last bool) *sql.ResultSet {
 	if len(data) == 0 {
 		last = true
 	}
-	return &resultSet{data: data, index: 0, last: last}
-}
-
-func (c *conn) getStmt(query string) *stmt {
-	return &stmt{connection: c, query: query}
-}
-
-func (c *conn) getResult() *result {
-	return &result{}
-}
-
-func (c *conn) getRows(columns []column, queryID string, resultSet *resultSet) *rows {
-	return &rows{connection: c, columns: columns, queryID: queryID, resultSet: resultSet}
+	return &sql.ResultSet{Data: data, Index: 0, Last: last}
 }

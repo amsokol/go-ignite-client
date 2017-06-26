@@ -5,5 +5,11 @@
         "amsokol",
         "qryfldexe",
         "qryfetch",
-        "qrycls"]
+        "qrycls",
+        "semver",
+        "blang"
+    ],
+    "go.lintOnSave": "workspace",
+    "go.vetOnSave": "workspace",
+    "go.buildOnSave": "workspace"
 }

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	_ "github.com/amsokol/go-ignite-client/sql"
+	_ "github.com/amsokol/go-ignite-client/sql/http"
 )
 
 func main() {

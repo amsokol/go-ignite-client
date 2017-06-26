@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	_ "github.com/amsokol/go-ignite-client/sql"
+	_ "github.com/amsokol/go-ignite-client/sql/http"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = stmt.Exec("111", "Sample Org")
+	_, err = stmt.Exec("001", "Sample Org 001")
 	if err != nil {
 		log.Fatal(err)
 	}
