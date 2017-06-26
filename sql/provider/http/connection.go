@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"database/sql/driver"
-	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -94,7 +93,7 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 	}
 
 	cl := len(r.FieldsMetadata)
-	rows := rows{connection: c, queryID: fmt.Sprintf("%d", r.QueryID), last: r.Last, columns: make([]column, cl, cl)}
+	rows := rows{connection: c, queryID: strconv.FormatInt(r.QueryID, 10), last: r.Last, columns: make([]column, cl, cl)}
 
 	// columns
 	for i, c := range r.FieldsMetadata {
@@ -149,19 +148,19 @@ func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (url.Values, error
 				var av string
 				switch v := nv.Value.(type) {
 				case int8:
-					av = fmt.Sprintf("%d", v)
+					av = strconv.FormatInt(int64(int8(v)), 10)
 				case int16:
-					av = fmt.Sprintf("%d", v)
+					av = strconv.FormatInt(int64(int16(v)), 10)
 				case int32:
-					av = fmt.Sprintf("%d", v)
+					av = strconv.FormatInt(int64(int32(v)), 10)
 				case int64:
-					av = fmt.Sprintf("%d", v)
+					av = strconv.FormatInt(int64(v), 10)
 				case float64:
-					av = fmt.Sprintf("%f", v)
+					av = strconv.FormatFloat(float64(v), 'f', -1, 64)
 				case float32:
-					av = fmt.Sprintf("%f", v)
+					av = strconv.FormatFloat(float64(float32(v)), 'f', -1, 32)
 				case bool:
-					av = fmt.Sprintf("%t", v)
+					av = strconv.FormatBool(bool(v))
 				case string:
 					av = v
 				// TODO: add binary support
