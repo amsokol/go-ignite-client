@@ -18,36 +18,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for i := 0; i < 2; i++ {
-		rows, err := db.Query(`select _key,name from "Organization".Organization`)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer rows.Close()
-
-		var (
-			id   int64
-			name string
-		)
-
-		for rows.Next() {
-			err := rows.Scan(&id, &name)
-			if err != nil {
-				log.Fatal(err)
-			}
-			log.Println(id, name)
-		}
-
-		err = rows.Err()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
+	defer db.Close()
 }

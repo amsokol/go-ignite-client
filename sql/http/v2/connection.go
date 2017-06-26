@@ -16,14 +16,15 @@ import (
 
 // SQL connection struct
 type conn struct {
-	client   v2.Client
-	cache    string
-	pageSize int64
+	client     v2.Client
+	cache      string
+	pageSize   int64
+	quarantine float64
 }
 
 // Open returns connection
-func Open(servers []string, username string, password string, cache string, pageSize int64) sql.Conn {
-	return &conn{cache: cache, pageSize: pageSize, client: v2.Open(servers, username, password)}
+func Open(servers []string, quarantine float64, username string, password string, cache string, pageSize int64) sql.Conn {
+	return &conn{cache: cache, pageSize: pageSize, client: v2.Open(servers, quarantine, username, password)}
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn for more details

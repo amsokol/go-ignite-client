@@ -13,11 +13,12 @@ import (
 )
 
 type connectionInfo struct {
-	Servers  []string `json:"servers"`
-	Username string   `json:"username"`
-	Password string   `json:"password"`
-	Cache    string   `json:"cache"`
-	PageSize int64    `json:"pageSize"`
+	Servers    []string `json:"servers"`
+	Username   string   `json:"username"`
+	Password   string   `json:"password"`
+	Cache      string   `json:"cache"`
+	PageSize   int64    `json:"pageSize"`
+	Quarantine float64  `json:"quarantine"`
 }
 
 // Driver is exported to allow it to be used directly.
@@ -45,7 +46,12 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 		ci.PageSize = 1000
 	}
 
-	ver, err := http.Version(ci.Servers, ci.Username, ci.Password)
+	if ci.Quarantine == 0 {
+		// set default value 30 min
+		ci.Quarantine = 30
+	}
+
+	ver, err := http.Version(ci.Servers, ci.Quarantine, ci.Username, ci.Password)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to get HTTP REST API version")
 	}
@@ -53,9 +59,9 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 	var conn driver.Conn
 	switch ver.Major {
 	case 1:
-		conn = v1.Open(ci.Servers, ci.Username, ci.Password, ci.Cache, ci.PageSize)
+		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	case 2:
-		conn = v1.Open(ci.Servers, ci.Username, ci.Password, ci.Cache, ci.PageSize)
+		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	default:
 		return nil, errors.Wrap(err, strings.Join([]string{"Unsupported HTTP REST API version v", ver.String()}, ""))
 	}
