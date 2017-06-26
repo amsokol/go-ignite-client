@@ -48,7 +48,7 @@ func (c *conn) Close() error {
 
 // See https://golang.org/pkg/database/sql/driver/#ConnBeginTx for more details
 func (c *conn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, error) {
-	return nil, errors.New("Ignite REST API does not support transactions")
+	return nil, errors.New("Ignite REST API v1.x.x does not support transactions")
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn
@@ -160,7 +160,7 @@ func (c *conn) namedValues2UrlValues(nvs []driver.NamedValue) (url.Values, error
 		for _, nv := range nvs {
 			if nv.Ordinal == i {
 				if nv.Value == nil {
-					return nil, errors.New("Ignite HTTP REST API does not support NULL as parameter")
+					return nil, errors.New("Ignite HTTP REST API v1.x.x does not support NULL as parameter")
 				}
 				var av string
 				switch v := nv.Value.(type) {
