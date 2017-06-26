@@ -10,20 +10,20 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/amsokol/go-ignite-client/http/v1"
+	"github.com/amsokol/go-ignite-client/http/v2"
 	"github.com/amsokol/go-ignite-client/sql"
 )
 
 // SQL connection struct
 type conn struct {
-	client   v1.Client
+	client   v2.Client
 	cache    string
 	pageSize int64
 }
 
 // Open returns connection
 func Open(servers []string, username string, password string, cache string, pageSize int64) sql.Conn {
-	return &conn{cache: cache, pageSize: pageSize, client: v1.Open(servers, username, password)}
+	return &conn{cache: cache, pageSize: pageSize, client: v2.Open(servers, username, password)}
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn for more details

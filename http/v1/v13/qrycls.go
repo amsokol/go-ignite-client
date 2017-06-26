@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/amsokol/go-ignite-client/http/v1/internal"
+	"github.com/amsokol/go-ignite-client/http/v1/common"
 )
 
 // requestSQLQueryClose is request for `qrycls` commands
@@ -15,7 +15,7 @@ type requestSQLQueryClose struct {
 	queryID string
 }
 
-// GetQueryID implements internal.RequestSQLQueryClose interface
+// GetQueryID implements common.RequestSQLQueryClose interface
 func (r *requestSQLQueryClose) GetQueryID() string {
 	return r.queryID
 }
@@ -29,29 +29,29 @@ type responseSQLQueryClose struct {
 	SessionToken  string `json:"sessionToken"`
 }
 
-// GetSuccessStatus implements internal.ResponseSQLQueryClose interface
-func (r *responseSQLQueryClose) GetSuccessStatus() internal.SuccessStatus {
-	return internal.SuccessStatus(r.SuccessStatus)
+// GetSuccessStatus implements common.ResponseSQLQueryClose interface
+func (r *responseSQLQueryClose) GetSuccessStatus() common.SuccessStatus {
+	return common.SuccessStatus(r.SuccessStatus)
 }
 
-// GetError implements internal.ResponseSQLQueryClose interface
+// GetError implements common.ResponseSQLQueryClose interface
 func (r *responseSQLQueryClose) GetError() string {
 	return r.Error
 }
 
-// GetSessionToken implements internal.ResponseSQLQueryClose interface
-func (r *responseSQLQueryClose) GetSessionToken() internal.SessionToken {
-	return internal.SessionToken(r.SessionToken)
+// GetSessionToken implements common.ResponseSQLQueryClose interface
+func (r *responseSQLQueryClose) GetSessionToken() common.SessionToken {
+	return common.SessionToken(r.SessionToken)
 }
 
-// GetResponse implements internal.ResponseSQLQueryClose interface
+// GetResponse implements common.ResponseSQLQueryClose interface
 func (r *responseSQLQueryClose) GetResponse() bool {
 	return r.Response
 }
 
 // SQLQueryClose closes query resources
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
-func SQLQueryClose(c internal.Client, queryID string) (bool, internal.SessionToken, error) {
+func SQLQueryClose(c common.Client, queryID string) (bool, common.SessionToken, error) {
 	v := url.Values{}
 	v.Add("cmd", "qrycls")
 	v.Add("qryId", queryID)

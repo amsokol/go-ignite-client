@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/amsokol/go-ignite-client/http/v1/internal"
+	"github.com/amsokol/go-ignite-client/http/v1/common"
 )
 
 // responseSQLQueryFetch is response for `qryfetch`, commands
@@ -19,23 +19,23 @@ type responseSQLQueryFetch struct {
 	SessionToken  string         `json:"sessionToken"`
 }
 
-// GetSuccessStatus implements internal.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetSuccessStatus() internal.SuccessStatus {
-	return internal.SuccessStatus(r.SuccessStatus)
+// GetSuccessStatus implements common.ResponseSQLQueryFetch interface
+func (r *responseSQLQueryFetch) GetSuccessStatus() common.SuccessStatus {
+	return common.SuccessStatus(r.SuccessStatus)
 }
 
-// GetError implements internal.ResponseSQLQueryFetch interface
+// GetError implements common.ResponseSQLQueryFetch interface
 func (r *responseSQLQueryFetch) GetError() string {
 	return r.Error
 }
 
-// GetSessionToken implements internal.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetSessionToken() internal.SessionToken {
-	return internal.SessionToken(r.SessionToken)
+// GetSessionToken implements common.ResponseSQLQueryFetch interface
+func (r *responseSQLQueryFetch) GetSessionToken() common.SessionToken {
+	return common.SessionToken(r.SessionToken)
 }
 
-// GetResponse implements internal.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetResponse() internal.SQLQueryResult {
+// GetResponse implements common.ResponseSQLQueryFetch interface
+func (r *responseSQLQueryFetch) GetResponse() common.SQLQueryResult {
 	return &r.Response
 }
 
@@ -48,25 +48,25 @@ type sqlQueryResult struct {
 	FieldsMetadata []fieldMetadata `json:"fieldsMetadata"`
 }
 
-// GetItems implements internal.SQLQueryResult interface
+// GetItems implements common.SQLQueryResult interface
 func (r *sqlQueryResult) GetItems() [][]interface{} {
 	return r.Items
 }
 
-// GetLast implements internal.SQLQueryResult interface
+// GetLast implements common.SQLQueryResult interface
 func (r *sqlQueryResult) GetLast() bool {
 	return r.Last
 }
 
-// GetQueryID implements internal.SQLQueryResult interface
+// GetQueryID implements common.SQLQueryResult interface
 func (r *sqlQueryResult) GetQueryID() int64 {
 	return r.QueryID
 }
 
-// GetFieldsMetadata implements internal.SQLQueryResult interface
-func (r *sqlQueryResult) GetFieldsMetadata() []internal.FieldMetadata {
+// GetFieldsMetadata implements common.SQLQueryResult interface
+func (r *sqlQueryResult) GetFieldsMetadata() []common.FieldMetadata {
 	size := len(r.FieldsMetadata)
-	res := make([]internal.FieldMetadata, size, size)
+	res := make([]common.FieldMetadata, size, size)
 	for i, v := range r.FieldsMetadata {
 		res[i] = &v
 	}
@@ -82,29 +82,29 @@ type fieldMetadata struct {
 	FieldTypeName string `json:"fieldTypeName"`
 }
 
-// GetSchemaName implements internal.FieldMetadata interface
+// GetSchemaName implements common.FieldMetadata interface
 func (m *fieldMetadata) GetSchemaName() string {
 	return m.SchemaName
 }
 
-// GetTypeName implements internal.FieldMetadata interface
+// GetTypeName implements common.FieldMetadata interface
 func (m *fieldMetadata) GetTypeName() string {
 	return m.TypeName
 }
 
-// GetFieldName implements internal.FieldMetadata interface
+// GetFieldName implements common.FieldMetadata interface
 func (m *fieldMetadata) GetFieldName() string {
 	return m.FieldName
 }
 
-// GetFieldTypeName implements internal.FieldMetadata interface
+// GetFieldTypeName implements common.FieldMetadata interface
 func (m *fieldMetadata) GetFieldTypeName() string {
 	return m.FieldTypeName
 }
 
 // SQLQueryFetch gets next page for the query
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-fetch for more details
-func SQLQueryFetch(c internal.Client, pageSize int64, queryID string) (internal.SQLQueryResult, internal.SessionToken, error) {
+func SQLQueryFetch(c common.Client, pageSize int64, queryID string) (common.SQLQueryResult, common.SessionToken, error) {
 	v := url.Values{}
 	v.Add("cmd", "qryfetch")
 	v.Add("qryId", queryID)
