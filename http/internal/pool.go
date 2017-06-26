@@ -57,7 +57,20 @@ func (p *pool) GetNextServer(server string, servers []string, quarantine float64
 		start = 0
 	}
 
-	// try to find node with no status, alive nodes or where quarantine is expired:
+	// try to find node with no status, alive nodes:
+	for i := 0; i < count; i++ {
+		index := (i + start) % size
+		s := servers[index]
+		node, found := p.data[s]
+		if !found {
+			return s, nil
+		}
+		if node.alive {
+			return s, nil
+		}
+	}
+
+	// try to find node where quarantine is expired:
 	for i := 0; i < count; i++ {
 		index := (i + start) % size
 		s := servers[index]
