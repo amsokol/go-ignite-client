@@ -47,14 +47,17 @@ func (r *rows) ColumnTypeDatabaseTypeName(index int) string {
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Rows for more details
-func (r *rows) Close() (err error) {
-	if r.connection != nil && len(r.queryID) > 0 {
-		err = r.connection.closeQueryContext(context.Background(), r.queryID)
+func (r *rows) Close() error {
+	defer func() {
+		r.connection = nil
+		r.queryID = ""
+	}()
+
+	if len(r.queryID) > 0 && r.connection != nil {
+		return r.connection.closeQueryContext(context.Background(), r.queryID)
 	}
 
-	r.connection = nil
-	r.queryID = ""
-	return err
+	return nil
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Rows for more details
