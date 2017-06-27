@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/amsokol/go-ignite-client/sql/http/v1"
+	"github.com/amsokol/go-ignite-client/sql/http/v2"
 )
 
 type connectionInfo struct {
@@ -62,7 +63,7 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 	case 1:
 		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	case 2:
-		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
+		conn = v2.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	default:
 		return nil, errors.New(strings.Join([]string{"Unsupported HTTP REST API version v",
 			strconv.FormatFloat(ci.Version, 'f', -1, 64), ". Supported versions are \"1\" and \"2\""}, ""))
