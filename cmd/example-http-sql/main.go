@@ -162,7 +162,7 @@ func main() {
 	}
 	defer rows.Close()
 	log.Println("")
-	log.Println("Persons who has salary more than 115 by Organization:")
+	log.Println("Persons who have salary more than 115 by Organization:")
 	for rows.Next() {
 		err := rows.Scan(&orgName, &prsFirstName, &prsLastName, &prsSalary)
 		if err != nil {
