@@ -25,23 +25,39 @@ func ItemsToValues(columns []sql.Column, items [][]interface{}) ([][]driver.Valu
 		row := make([]driver.Value, colcount, colcount)
 		for j, v := range item {
 			var err error
+			var i64 int64
+			var f64 float64
 			sv := fmt.Sprint(v)
 			t := columns[j].ServerType
 			switch t {
 			case "java.lang.Byte":
-				row[j], err = strconv.ParseInt(sv, 10, 8)
+				i64, err = strconv.ParseInt(sv, 10, 8)
+				if err == nil {
+					row[j] = int8(i64)
+				}
 			case "java.lang.Short":
-				row[j], err = strconv.ParseInt(sv, 10, 16)
+				i64, err = strconv.ParseInt(sv, 10, 16)
+				if err == nil {
+					row[j] = int16(i64)
+				}
 			case "java.lang.Integer":
-				row[j], err = strconv.ParseInt(sv, 10, 32)
+				i64, err = strconv.ParseInt(sv, 10, 32)
+				if err == nil {
+					row[j] = int32(i64)
+				}
 			case "java.lang.Long":
 				row[j], err = strconv.ParseInt(sv, 10, 64)
 			case "java.lang.Double":
 				row[j], err = strconv.ParseFloat(sv, 64)
+			case "java.lang.Float":
+				f64, err = strconv.ParseFloat(sv, 64)
+				if err == nil {
+					row[j] = float32(f64)
+				}
 			case "java.lang.Boolean":
 				row[j], err = strconv.ParseBool(sv)
 			case "java.lang.Character":
-				row[j] = sv
+				row[j] = []rune(sv)
 			case "java.lang.String":
 				row[j] = sv
 			// TODO: add binary support
@@ -86,6 +102,8 @@ func NamedValuesToURLValues(nvs []driver.NamedValue) (url.Values, error) {
 					av = strconv.FormatFloat(float64(float32(v)), 'f', -1, 32)
 				case bool:
 					av = strconv.FormatBool(bool(v))
+				case []rune:
+					av = string(v)
 				case string:
 					av = v
 				// TODO: add binary support
