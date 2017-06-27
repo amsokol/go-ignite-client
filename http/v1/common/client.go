@@ -41,7 +41,7 @@ func Open(servers []string, quarantine float64, username string, password string
 func (c *client) Execute(v url.Values) ([]byte, error) {
 	var server string
 	server = ""
-	for {
+	for i := 0; i < len(c.servers); i++ {
 		server, err := internal.GlobalPool.GetNextServer(server, c.servers, c.quarantine)
 		if err != nil {
 			if err == io.EOF {
@@ -80,6 +80,7 @@ func (c *client) Execute(v url.Values) ([]byte, error) {
 		internal.GlobalPool.UpdateStatus(server, false)
 		log.Println("Server", server, "is down or not available for you:", err)
 	}
+	return nil, errors.New("All servers are down or not available for you (attempts ended)")
 }
 
 // GetError returns Ignite specific error message
