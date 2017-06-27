@@ -68,7 +68,7 @@ func (r *sqlQueryResult) GetFieldsMetadata() []common.FieldMetadata {
 	size := len(r.FieldsMetadata)
 	res := make([]common.FieldMetadata, size, size)
 	for i, v := range r.FieldsMetadata {
-		res[i] = &v
+		res[i] = &fieldMetadata{FieldName: v.FieldName, FieldTypeName: v.FieldTypeName, SchemaName: v.SchemaName, TypeName: v.TypeName}
 	}
 	return res
 }
