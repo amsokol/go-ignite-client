@@ -7,7 +7,8 @@
         "qryfetch",
         "qrycls",
         "semver",
-        "blang"
+        "blang",
+        "uint"
     ],
     "go.lintOnSave": "workspace",
     "go.vetOnSave": "workspace",
