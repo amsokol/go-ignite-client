@@ -24,6 +24,6 @@
   name = "github.com/pkg/errors"
   version = "v0.8.0"
 
-[[projects]]
+[[constraint]]
   name = "github.com/blang/semver"
   version = "v3.5.0"
