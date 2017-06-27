@@ -37,14 +37,12 @@ Example:
 }
 ```
 Specification:
-| Parameter  | Type    | Mandatory | Default | Description
-|------------|---------|-----------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| version    | number  | no        | `1`     | Ignite HTTP REST API version you are going to use. `1` is for `1.x.x` server, `2` is for 2.x.x server                                                                                                                                               |
-| servers    | URLs    | yes       |         | Ignite server list. Client automatically reconnects to another server if current server become unavailable                                                                                                                                          |
-| username   | string  | no        |         | User name to connect to servers. Client supports HTTP Basic Authentication                                                                                                                                                                          |
-| password   | string  | no        |         | Password to connect to servers. Client supports HTTP Basic Authentication                                                                                                                                                                           |
-| cache      | string  | yes       |         | Ignite cache name as the default schema for SQL query. But I recommend provide table schema (cache name) in SQL query explicitly                                                                                                                    |
-| pageSize   | int     | no        | `1000`  | Pagination in Ignite is a mechanism to avoid fetching the whole data set from server nodes to the client. I.e., while you iterate through the Rows, the client will fetch data in chunks. The size of each chunk is defined by `pageSize` property. |
+- `version` - type `number`, optional, default value is `1`. Ignite HTTP REST API version you are going to use. `1` is for `1.x.x` server, `2` is for 2.x.x server
+- `servers` - type `URL`s, mandatory, no default value. Ignite server list. Client automatically reconnects to another server if current server become unavailable
+- `username` - type `string`, optional, no default value. User name to connect to servers. Client supports HTTP Basic Authentication
+- `password` - type `string`, optional, no default value. Password to connect to servers. Client supports HTTP Basic Authentication
+- `cache`- type `string`, mandatory. Ignite cache name as the default schema for SQL query. But I recommend provide table schema (cache name) in each SQL query explicitly
+- `pageSize`- type `int`, optional, default value is `1000`. Pagination in Ignite is a mechanism to avoid fetching the whole data set from server nodes to the client. I.e., while you iterate through the Rows, the client will fetch data in chunks. The size of each chunk is defined by `pageSize` property.
 
 #### Database fields mapping (Ignite -> golang and visa verse):
 | Ignite (Java) type  | golang type |
