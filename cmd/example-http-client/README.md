@@ -34,9 +34,8 @@ import (
 
 func main() {
 	servers := []string{"http://localhost:8080/ignite"}
-	quarantine := 10.0 // 10 mins
 
-	c := v2.Open(servers, quarantine, "", "") // no login and password
+	c := v2.Open(servers, "", "") // no login and password
 
 	v, _, err := c.GetVersion()
 	if err != nil {
