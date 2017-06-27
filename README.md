@@ -11,7 +11,6 @@
 
 ### Issues:
 - `ignite-sql-http` SQL driver does not support transactions (Ignite HTTP REST API does not support transactions)
-- Fields with type Binary are not supported yet (will be fixed soon)
 - Only 4 methods (are needed for SQL driver) of REST API are implemented now
 
 ### SQL driver (`ignite-sql-http`) for Apache Ignite HTTP REST API:
