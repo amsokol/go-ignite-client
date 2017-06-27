@@ -5,6 +5,7 @@ import (
 	// "log"
 	"math"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/pkg/errors"
@@ -24,12 +25,23 @@ func (n *node) isQuarantineExpired(quarantine float64) bool {
 
 type pool struct {
 	data map[string]node
+	mx   *sync.Mutex
 }
 
 // GlobalPool is global pool
-var GlobalPool = pool{data: make(map[string]node)}
+var GlobalPool = pool{data: make(map[string]node), mx: &sync.Mutex{}}
 
 func (p *pool) UpdateStatus(server string, alive bool) {
+	p.mx.Lock()
+	defer p.mx.Unlock()
+
+	if alive {
+		if node, found := p.data[server]; found && node.alive {
+			// we do update set alive status for alive server to avoid allocation
+			// log.Println("we do update set alive status for alive server to avoid allocation")
+			return
+		}
+	}
 	p.data[server] = node{lastupdate: time.Now(), alive: alive}
 	//	log.Println("Status of server", server, "set alive =", alive)
 }
@@ -61,7 +73,9 @@ func (p *pool) GetNextServer(server string, servers []string, quarantine float64
 	for i := 0; i < count; i++ {
 		index := (i + start) % size
 		s := servers[index]
+		p.mx.Lock()
 		node, found := p.data[s]
+		p.mx.Unlock()
 		if !found {
 			return s, nil
 		}
@@ -74,7 +88,9 @@ func (p *pool) GetNextServer(server string, servers []string, quarantine float64
 	for i := 0; i < count; i++ {
 		index := (i + start) % size
 		s := servers[index]
+		p.mx.Lock()
 		node, found := p.data[s]
+		p.mx.Unlock()
 		if !found {
 			return s, nil
 		}
