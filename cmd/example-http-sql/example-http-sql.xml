@@ -82,6 +82,7 @@
                                 <property name="fields">
                                     <map>
                                         <entry key="name" value="java.lang.String"/>
+                                        <entry key="foundDateTime" value="java.sql.Timestamp"/>
                                     </map>
                                 </property>
 

@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 
@@ -60,8 +61,11 @@ func ItemsToValues(columns []sql.Column, items [][]interface{}) ([][]driver.Valu
 				row[j] = []rune(sv)
 			case "java.lang.String":
 				row[j] = sv
+			case "java.sql.Timestamp":
+				// RFC1123 = "Mon, 02 Jan 2006 15:04:05 MST"
+				// Custom:
+				row[j], err = time.Parse("Jan 02, 2006 3:04:05 PM", sv)
 			// TODO: add binary support
-			// TODO: add time.Time support
 			default:
 				return nil, errors.New(strings.Join([]string{"Unsupported parameter type", t}, ": "))
 			}
@@ -106,6 +110,9 @@ func NamedValuesToURLValues(nvs []driver.NamedValue) (url.Values, error) {
 					av = string(v)
 				case string:
 					av = v
+				case time.Time:
+					// RFC3339 = "2006-01-02T15:04:05Z07:00"
+					av = v.Format(time.RFC3339)
 				// TODO: add binary support
 				// TODO: add time.Time support
 				default:

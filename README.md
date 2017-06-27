@@ -11,7 +11,6 @@
 
 ### Issues:
 - `ignite-sql-http` SQL driver does not support transactions (Ignite HTTP REST API does not support transactions)
-- Fields with type Time and Date are not supported yet (will be fixed soon)
 - Fields with type Binary are not supported yet (will be fixed soon)
 - Only 4 methods (are needed for SQL driver) of REST API are implemented now
 
@@ -56,6 +55,8 @@ Specification:
 | java.lang.Boolean   | bool        |
 | java.lang.Character | []rune      |
 | java.lang.String    | string      |
+| java.sql.Timestamp  | time.Time   |
+| java.util.Date      | time.Time   |
 
 ### Apache Ignite HTTP REST API client:
 ```

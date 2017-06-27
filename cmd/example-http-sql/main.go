@@ -2,9 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"log"
-
 	"fmt"
+	"log"
+	"time"
+
 	_ "github.com/amsokol/go-ignite-client/sql/http"
 )
 
@@ -40,13 +41,14 @@ func main() {
 	}
 
 	// Add 10 Organizations
-	stmt, err := db.Prepare(`INSERT INTO "Organization".Organization(_key, name) VALUES(?, ?)`)
+	stmt, err := db.Prepare(`INSERT INTO "Organization".Organization(_key, name, foundDateTime) VALUES(?, ?, ?)`)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for i := 1; i <= 10; i++ {
 		_, err = stmt.Exec(i, // _key
-			fmt.Sprintf("Organization #%d", i)) // name
+			fmt.Sprintf("Organization #%d", i), // name
+			time.Now())                         // foundDateTime
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -54,7 +56,7 @@ func main() {
 
 	// Add 30 Persons
 	stmt, err = db.Prepare(`INSERT INTO "Person".Person(_key, orgId, firstName, lastName, resume, salary)
-		VALUES(?, ?, ?, ?, ?, ?)`)
+			VALUES(?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -75,22 +77,23 @@ func main() {
 	}
 
 	// Show all Organizations
-	rows, err := db.Query(`SELECT _key, name FROM "Organization".Organization`)
+	rows, err := db.Query(`SELECT _key, name, foundDateTime FROM "Organization".Organization`)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 	var (
-		orgID   int64
-		orgName string
+		orgID            int64
+		orgName          string
+		orgfoundDateTime time.Time
 	)
 	log.Println("Organizations:")
 	for rows.Next() {
-		err := rows.Scan(&orgID, &orgName)
+		err := rows.Scan(&orgID, &orgName, &orgfoundDateTime)
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(orgID, orgName)
+		log.Println(orgID, orgName, orgfoundDateTime)
 	}
 	err = rows.Err()
 	if err != nil {
@@ -127,9 +130,9 @@ func main() {
 
 	// Show Person with Organization name
 	rows, err = db.Query(`SELECT o.name, p.firstName, p.lastName, p.salary FROM "Person".Person as p
-		INNER JOIN "Organization".Organization o
-		ON p.orgId = o._key
-		ORDER BY name`)
+			INNER JOIN "Organization".Organization o
+			ON p.orgId = o._key
+			ORDER BY name`)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -150,10 +153,10 @@ func main() {
 
 	// Show Person with Organization with filter
 	rows, err = db.Query(`SELECT o.name, p.firstName, p.lastName, p.salary FROM "Person".Person as p
-		INNER JOIN "Organization".Organization o
-		ON p.orgId = o._key
-		WHERE p.salary > ?
-		ORDER BY name`, 115)
+			INNER JOIN "Organization".Organization o
+			ON p.orgId = o._key
+			WHERE p.salary > ?
+			ORDER BY name`, 115)
 	if err != nil {
 		log.Fatal(err)
 	}
