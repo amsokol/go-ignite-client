@@ -14,13 +14,12 @@ import (
 )
 
 type connectionInfo struct {
-	Version    float64  `json:"version"`
-	Servers    []string `json:"servers"`
-	Username   string   `json:"username"`
-	Password   string   `json:"password"`
-	Cache      string   `json:"cache"`
-	PageSize   int64    `json:"pageSize"`
-	Quarantine float64  `json:"quarantine"`
+	Version  float64  `json:"version"`
+	Servers  []string `json:"servers"`
+	Username string   `json:"username"`
+	Password string   `json:"password"`
+	Cache    string   `json:"cache"`
+	PageSize int64    `json:"pageSize"`
 }
 
 // Driver is exported to allow it to be used directly.
@@ -48,11 +47,6 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 		ci.PageSize = 1000
 	}
 
-	if ci.Quarantine == 0 {
-		// set default value 30 min
-		ci.Quarantine = 30
-	}
-
 	if ci.Version == 0 {
 		// set default version is 1.0
 		ci.Version = 1.0
@@ -61,9 +55,9 @@ func (a *Driver) Open(name string) (driver.Conn, error) {
 	var conn driver.Conn
 	switch ci.Version {
 	case 1:
-		conn = v1.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
+		conn = v1.Open(ci.Servers, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	case 2:
-		conn = v2.Open(ci.Servers, ci.Quarantine, ci.Username, ci.Password, ci.Cache, ci.PageSize)
+		conn = v2.Open(ci.Servers, ci.Username, ci.Password, ci.Cache, ci.PageSize)
 	default:
 		return nil, errors.New(strings.Join([]string{"Unsupported HTTP REST API version v",
 			strconv.FormatFloat(ci.Version, 'f', -1, 64), ". Supported versions are \"1\" and \"2\""}, ""))

@@ -89,6 +89,6 @@ func (c *client) SQLFieldsQueryExecute(cacheName string, pageSize int64, query s
 }
 
 // Open returns client
-func Open(servers []string, quarantine float64, username string, password string) Client {
-	return &client{client: common.Open(servers, quarantine, username, password)}
+func Open(servers []string, username string, password string) Client {
+	return &client{client: common.Open(servers, username, password)}
 }

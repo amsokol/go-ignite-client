@@ -1,7 +1,6 @@
 package common
 
 import (
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -26,15 +25,14 @@ const (
 var successStatusMsg = []string{"success", "failed", "authorization failed", "security check failed", "unknown status"}
 
 type client struct {
-	servers    []string
-	username   string
-	password   string
-	quarantine float64
+	servers  []string
+	username string
+	password string
 }
 
 // Open returns client
-func Open(servers []string, quarantine float64, username string, password string) Client {
-	return &client{servers: servers, quarantine: quarantine, username: username, password: password}
+func Open(servers []string, username string, password string) Client {
+	return &client{servers: servers, username: username, password: password}
 }
 
 // Execute implements http.CommandExecutor
@@ -42,11 +40,8 @@ func (c *client) Execute(v url.Values) ([]byte, error) {
 	var server string
 	server = ""
 	for i := 0; i < len(c.servers); i++ {
-		server, err := internal.GlobalPool.GetNextServer(server, c.servers, c.quarantine)
+		server, err := internal.GlobalPool.GetNextServer(server, c.servers)
 		if err != nil {
-			if err == io.EOF {
-				return nil, errors.Wrap(err, "All servers are down or not available for you")
-			}
 			return nil, errors.Wrap(err, "Can't get server from pool")
 		}
 
@@ -80,7 +75,7 @@ func (c *client) Execute(v url.Values) ([]byte, error) {
 		internal.GlobalPool.UpdateStatus(server, false)
 		log.Println("Server", server, "is down or not available for you:", err)
 	}
-	return nil, errors.New("All servers are down or not available for you (attempts ended)")
+	return nil, errors.New("All servers are down or not available for you")
 }
 
 // GetError returns Ignite specific error message

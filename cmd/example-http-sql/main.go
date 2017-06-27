@@ -14,8 +14,7 @@ func main() {
 		"servers" : [
 			"http://localhost:8080/ignite"
 		],
-		"cache" : "Person",
-		"quarantine" : 5
+		"cache" : "Person"
 	}`)
 	if err != nil {
 		log.Fatal(err)
