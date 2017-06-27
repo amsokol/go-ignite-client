@@ -14,8 +14,6 @@ func main() {
 		"servers" : [
 			"http://localhost:8080/ignite"
 		],
-		"username" : "login",
-		"password" : "password",
 		"cache" : "Person",
 		"quarantine" : 5
 	}`)
