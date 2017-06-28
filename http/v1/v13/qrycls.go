@@ -9,44 +9,13 @@ import (
 	"github.com/amsokol/go-ignite-client/http/v1/common"
 )
 
-// requestSQLQueryClose is request for `qrycls` commands
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
-type requestSQLQueryClose struct {
-	queryID string
-}
-
-// GetQueryID implements common.RequestSQLQueryClose interface
-func (r *requestSQLQueryClose) GetQueryID() string {
-	return r.queryID
-}
-
 // responseSQLQueryClose is response for `qrycls` commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
 type responseSQLQueryClose struct {
-	SuccessStatus int64  `json:"successStatus"`
-	Error         string `json:"error"`
-	Response      bool   `json:"response"`
-	SessionToken  string `json:"sessionToken"`
-}
-
-// GetSuccessStatus implements common.ResponseSQLQueryClose interface
-func (r *responseSQLQueryClose) GetSuccessStatus() common.SuccessStatus {
-	return common.SuccessStatus(r.SuccessStatus)
-}
-
-// GetError implements common.ResponseSQLQueryClose interface
-func (r *responseSQLQueryClose) GetError() string {
-	return r.Error
-}
-
-// GetSessionToken implements common.ResponseSQLQueryClose interface
-func (r *responseSQLQueryClose) GetSessionToken() common.SessionToken {
-	return common.SessionToken(r.SessionToken)
-}
-
-// GetResponse implements common.ResponseSQLQueryClose interface
-func (r *responseSQLQueryClose) GetResponse() bool {
-	return r.Response
+	SuccessStatus common.SuccessStatus `json:"successStatus"`
+	Error         string               `json:"error"`
+	Response      bool                 `json:"response"`
+	SessionToken  common.SessionToken  `json:"sessionToken"`
 }
 
 // SQLQueryClose closes query resources
@@ -67,9 +36,9 @@ func SQLQueryClose(c common.Client, queryID string) (bool, common.SessionToken, 
 		return false, "", errors.Wrap(err, "Can't unmarshal respone to ResponseSqlQueryClose")
 	}
 
-	if c.IsFailed(res.GetSuccessStatus()) {
-		return false, "", errors.New(c.GetError(res.GetSuccessStatus(), res.GetError()))
+	if c.IsFailed(res.SuccessStatus) {
+		return false, "", errors.New(c.GetError(res.SuccessStatus, res.Error))
 	}
 
-	return res.GetResponse(), res.GetSessionToken(), nil
+	return res.Response, res.SessionToken, nil
 }

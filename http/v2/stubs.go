@@ -17,24 +17,6 @@ const SessionTokenNil = common.SessionTokenNil
 // Version is response data from `version` command
 type Version common.Version
 
-// ResponseSQLQueryClose is response for `qrycls` commands
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
-type ResponseSQLQueryClose interface {
-	common.ResponseSQLQueryClose
-}
-
-// ResponseSQLQueryFetch is response for `qryfetch`, commands
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-fetch for more details
-type ResponseSQLQueryFetch interface {
-	common.ResponseSQLQueryFetch
-}
-
-// ResponseSQLFieldsQueryExecute is response for `qryfldexe`, commands
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
-type ResponseSQLFieldsQueryExecute interface {
-	common.ResponseSQLFieldsQueryExecute
-}
-
 // SQLQueryResult is body of response for `qryfldexe`, command
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
 type SQLQueryResult interface {

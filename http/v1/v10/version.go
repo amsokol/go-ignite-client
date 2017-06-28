@@ -13,26 +13,10 @@ import (
 // responseVersion is response for `version` command
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-version for more details
 type responseVersion struct {
-	SuccessStatus int64  `json:"successStatus"`
-	Error         string `json:"error"`
-	Version       string `json:"response"`
-	SessionToken  string `json:"sessionToken"`
-}
-
-func (r *responseVersion) GetSuccessStatus() common.SuccessStatus {
-	return common.SuccessStatus(r.SuccessStatus)
-}
-
-func (r *responseVersion) GetError() string {
-	return r.Error
-}
-
-func (r *responseVersion) GetVersion() string {
-	return r.Version
-}
-
-func (r *responseVersion) GetSessionToken() common.SessionToken {
-	return common.SessionToken(r.SessionToken)
+	SuccessStatus common.SuccessStatus `json:"successStatus"`
+	Error         string               `json:"error"`
+	Version       string               `json:"response"`
+	SessionToken  common.SessionToken  `json:"sessionToken"`
 }
 
 // Version command shows current Ignite version.
@@ -52,8 +36,8 @@ func Version(c common.Client) (common.Version, common.SessionToken, error) {
 		return common.Version{}, common.SessionTokenNil, errors.Wrap(err, "Can't unmarshal respone to ResponseVersion")
 	}
 
-	if c.IsFailed(res.GetSuccessStatus()) {
-		return common.Version{}, common.SessionTokenNil, errors.New(c.GetError(res.GetSuccessStatus(), res.GetError()))
+	if c.IsFailed(res.SuccessStatus) {
+		return common.Version{}, common.SessionTokenNil, errors.New(c.GetError(res.SuccessStatus, res.Error))
 	}
 
 	sv, err := semver.Make(res.Version)
@@ -61,5 +45,5 @@ func Version(c common.Client) (common.Version, common.SessionToken, error) {
 		return common.Version{}, common.SessionTokenNil, errors.Wrap(err, "Server returned version in unsupported format")
 	}
 
-	return common.Version(sv), res.GetSessionToken(), nil
+	return common.Version(sv), res.SessionToken, nil
 }

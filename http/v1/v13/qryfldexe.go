@@ -12,30 +12,10 @@ import (
 // responseSQLFieldsQueryExecute is response for `qryfldexe`, commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
 type responseSQLFieldsQueryExecute struct {
-	SuccessStatus int64          `json:"successStatus"`
-	Error         string         `json:"error"`
-	Response      sqlQueryResult `json:"response"`
-	SessionToken  string         `json:"sessionToken"`
-}
-
-// GetSuccessStatus implements common.ResponseSQLFieldsQueryExecute interface
-func (r *responseSQLFieldsQueryExecute) GetSuccessStatus() common.SuccessStatus {
-	return common.SuccessStatus(r.SuccessStatus)
-}
-
-// GetError implements common.ResponseSQLFieldsQueryExecute interface
-func (r *responseSQLFieldsQueryExecute) GetError() string {
-	return r.Error
-}
-
-// GetSessionToken implements common.ResponseSQLFieldsQueryExecute interface
-func (r *responseSQLFieldsQueryExecute) GetSessionToken() common.SessionToken {
-	return common.SessionToken(r.SessionToken)
-}
-
-// Response implements common.ResponseSQLFieldsQueryExecute interface
-func (r *responseSQLFieldsQueryExecute) GetResponse() common.SQLQueryResult {
-	return &r.Response
+	SuccessStatus common.SuccessStatus `json:"successStatus"`
+	Error         string               `json:"error"`
+	Response      sqlQueryResult       `json:"response"`
+	SessionToken  common.SessionToken  `json:"sessionToken"`
 }
 
 // SQLFieldsQueryExecute runs sql fields query over cache.
@@ -57,9 +37,9 @@ func SQLFieldsQueryExecute(c common.Client, cacheName string, pageSize int64, qu
 		return nil, "", errors.Wrap(err, "Can't unmarshal respone to WrapperResponse")
 	}
 
-	if c.IsFailed(res.GetSuccessStatus()) {
-		return nil, "", errors.New(c.GetError(res.GetSuccessStatus(), res.GetError()))
+	if c.IsFailed(res.SuccessStatus) {
+		return nil, "", errors.New(c.GetError(res.SuccessStatus, res.Error))
 	}
 
-	return res.GetResponse(), res.GetSessionToken(), nil
+	return &res.Response, res.SessionToken, nil
 }

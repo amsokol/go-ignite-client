@@ -13,30 +13,10 @@ import (
 // responseSQLQueryFetch is response for `qryfetch`, commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-fetch for more details
 type responseSQLQueryFetch struct {
-	SuccessStatus int64          `json:"successStatus"`
-	Error         string         `json:"error"`
-	Response      sqlQueryResult `json:"response"`
-	SessionToken  string         `json:"sessionToken"`
-}
-
-// GetSuccessStatus implements common.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetSuccessStatus() common.SuccessStatus {
-	return common.SuccessStatus(r.SuccessStatus)
-}
-
-// GetError implements common.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetError() string {
-	return r.Error
-}
-
-// GetSessionToken implements common.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetSessionToken() common.SessionToken {
-	return common.SessionToken(r.SessionToken)
-}
-
-// GetResponse implements common.ResponseSQLQueryFetch interface
-func (r *responseSQLQueryFetch) GetResponse() common.SQLQueryResult {
-	return &r.Response
+	SuccessStatus common.SuccessStatus `json:"successStatus"`
+	Error         string               `json:"error"`
+	Response      sqlQueryResult       `json:"response"`
+	SessionToken  common.SessionToken  `json:"sessionToken"`
 }
 
 // sqlQueryResult is body of response for `qryfetch`, command
@@ -121,9 +101,9 @@ func SQLQueryFetch(c common.Client, pageSize int64, queryID string) (common.SQLQ
 		return nil, "", errors.Wrap(err, "Can't unmarshal respone to WrapperResponse")
 	}
 
-	if c.IsFailed(res.GetSuccessStatus()) {
-		return nil, "", errors.New(c.GetError(res.GetSuccessStatus(), res.GetError()))
+	if c.IsFailed(res.SuccessStatus) {
+		return nil, "", errors.New(c.GetError(res.SuccessStatus, res.Error))
 	}
 
-	return res.GetResponse(), res.GetSessionToken(), nil
+	return &res.Response, res.SessionToken, nil
 }
