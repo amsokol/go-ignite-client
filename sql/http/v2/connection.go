@@ -101,22 +101,22 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 	}
 
 	// columns
-	colcount := len(res.GetFieldsMetadata())
+	colcount := len(res.FieldsMetadata)
 	columns := make([]sql.Column, colcount, colcount)
-	for i, c := range res.GetFieldsMetadata() {
-		columns[i] = sql.Column{Name: c.GetFieldName(), ServerType: c.GetFieldTypeName()}
+	for i, c := range res.FieldsMetadata {
+		columns[i] = sql.Column{Name: c.FieldName, ServerType: c.FieldTypeName}
 	}
 
 	// data
-	data, err := common.ItemsToValues(columns, res.GetItems())
+	data, err := common.ItemsToValues(columns, res.Items)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed extract values from 'qryfldexe' response")
 	}
 
 	return &sql.Rows{Connection: c,
 		ColumnsRaw: columns,
-		QueryID:    strconv.FormatInt(res.GetQueryID(), 10),
-		ResultSet:  c.getResultSet(data, res.GetLast())}, nil
+		QueryID:    strconv.FormatInt(res.QueryID, 10),
+		ResultSet:  c.getResultSet(data, res.Last)}, nil
 }
 
 // fetchContext gets next page for the query
@@ -131,12 +131,12 @@ func (c *conn) FetchContext(ctx context.Context, queryID string, columns []sql.C
 	}
 
 	// data
-	data, err := common.ItemsToValues(columns, res.GetItems())
+	data, err := common.ItemsToValues(columns, res.Items)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed extract values from 'qryfetch' response")
 	}
 
-	return c.getResultSet(data, res.GetLast()), nil
+	return c.getResultSet(data, res.Last), nil
 }
 
 // closeQueryContext closes query resources

@@ -6,21 +6,22 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/amsokol/go-ignite-client/http/v1/common"
+	"github.com/amsokol/go-ignite-client/http/types"
+	"github.com/amsokol/go-ignite-client/http/v1/client"
 )
 
 // responseSQLQueryClose is response for `qrycls` commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
 type responseSQLQueryClose struct {
-	SuccessStatus common.SuccessStatus `json:"successStatus"`
-	Error         string               `json:"error"`
-	Response      bool                 `json:"response"`
-	SessionToken  common.SessionToken  `json:"sessionToken"`
+	SuccessStatus types.SuccessStatus `json:"successStatus"`
+	Error         string              `json:"error"`
+	Response      bool                `json:"response"`
+	SessionToken  types.SessionToken  `json:"sessionToken"`
 }
 
 // SQLQueryClose closes query resources
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
-func SQLQueryClose(c common.Client, queryID string) (bool, common.SessionToken, error) {
+func SQLQueryClose(c client.Client, queryID string) (bool, types.SessionToken, error) {
 	v := url.Values{}
 	v.Add("cmd", "qrycls")
 	v.Add("qryId", queryID)

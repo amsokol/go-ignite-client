@@ -1,4 +1,4 @@
-package common
+package internal
 
 import (
 	"io/ioutil"
@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/amsokol/go-ignite-client/http/internal"
+	"github.com/amsokol/go-ignite-client/http/types"
 )
 
 // See https://apacheignite.readme.io/docs/rest-api#section-returned-value for more details
@@ -24,23 +25,19 @@ const (
 // See https://apacheignite.readme.io/docs/rest-api#section-returned-value for more details
 var successStatusMsg = []string{"success", "failed", "authorization failed", "security check failed", "unknown status"}
 
-type client struct {
-	servers  []string
-	username string
-	password string
-}
-
-// Open returns client
-func Open(servers []string, username string, password string) Client {
-	return &client{servers: servers, username: username, password: password}
+// Client is the object providing the methods to execute REST API commands
+type Client struct {
+	Servers  []string
+	Username string
+	Password string
 }
 
 // Execute implements http.CommandExecutor
-func (c *client) Execute(v url.Values) ([]byte, error) {
+func (c *Client) Execute(v url.Values) ([]byte, error) {
 	var server string
 	server = ""
-	for i := 0; i < len(c.servers); i++ {
-		server, err := internal.GlobalPool.GetNextServer(server, c.servers)
+	for i := 0; i < len(c.Servers); i++ {
+		server, err := internal.GlobalPool.GetNextServer(server, c.Servers)
 		if err != nil {
 			return nil, errors.Wrap(err, "Can't get server from pool")
 		}
@@ -52,8 +49,8 @@ func (c *client) Execute(v url.Values) ([]byte, error) {
 
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-		if len(c.username) > 0 {
-			req.SetBasicAuth(c.username, c.password)
+		if len(c.Username) > 0 {
+			req.SetBasicAuth(c.Username, c.Password)
 		}
 
 		//		log.Println("CLIENT POSTing request to server", server)
@@ -79,7 +76,7 @@ func (c *client) Execute(v url.Values) ([]byte, error) {
 }
 
 // GetError returns Ignite specific error message
-func (c *client) GetError(successStatus SuccessStatus, error string) string {
+func (c *Client) GetError(successStatus types.SuccessStatus, error string) string {
 	if successStatus < successStatusSuccess || successStatusSecurityCheckFailed < successStatus {
 		successStatus = successStatusUnknown
 	}
@@ -91,10 +88,10 @@ func (c *client) GetError(successStatus SuccessStatus, error string) string {
 }
 
 // IsFailed returns `true` if `successStatus` value means failed
-func (c *client) IsFailed(successStatus SuccessStatus) bool {
+func (c *Client) IsFailed(successStatus types.SuccessStatus) bool {
 	return successStatus != successStatusSuccess
 }
 
-func (c *client) isServerDown(code int) bool {
+func (c *Client) isServerDown(code int) bool {
 	return code == http.StatusBadGateway || code == http.StatusInternalServerError
 }

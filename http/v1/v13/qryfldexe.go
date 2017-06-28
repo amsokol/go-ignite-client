@@ -6,21 +6,22 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/amsokol/go-ignite-client/http/v1/common"
+	"github.com/amsokol/go-ignite-client/http/types"
+	"github.com/amsokol/go-ignite-client/http/v1/client"
 )
 
 // responseSQLFieldsQueryExecute is response for `qryfldexe`, commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
 type responseSQLFieldsQueryExecute struct {
-	SuccessStatus common.SuccessStatus `json:"successStatus"`
+	SuccessStatus types.SuccessStatus  `json:"successStatus"`
 	Error         string               `json:"error"`
-	Response      sqlQueryResult       `json:"response"`
-	SessionToken  common.SessionToken  `json:"sessionToken"`
+	Response      types.SQLQueryResult `json:"response"`
+	SessionToken  types.SessionToken   `json:"sessionToken"`
 }
 
 // SQLFieldsQueryExecute runs sql fields query over cache.
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
-func SQLFieldsQueryExecute(c common.Client, cacheName string, pageSize int64, query string, args url.Values) (common.SQLQueryResult, common.SessionToken, error) {
+func SQLFieldsQueryExecute(c client.Client, cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error) {
 	args.Add("cmd", "qryfldexe")
 	args.Add("cacheName", cacheName)
 	args.Add("qry", query)
