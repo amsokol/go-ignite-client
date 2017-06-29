@@ -20,7 +20,7 @@ func TestVersion(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "Get log from 10 to 15 line",
+			name: "Get version of server",
 			args: args{
 				c: client.Open([]string{"http://localhost:8080/ignite"}, "", ""),
 			},
