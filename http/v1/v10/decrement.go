@@ -19,7 +19,7 @@ type responseDecrement struct {
 	Value          int64  `json:"response"`
 }
 
-// Decrement is response for `decr` command
+// Decrement command subtracts and gets current value of given atomic long
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
 func Decrement(c client.Client, cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error) {
 	v := url.Values{}

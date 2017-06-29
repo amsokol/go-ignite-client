@@ -36,7 +36,7 @@ func (c *client) Version() (types.Version, types.SessionToken, error) {
 	return v10.Version(c.client)
 }
 
-// Decrement is response for `decr` command
+// Decrement command subtracts and gets current value of given atomic long
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
 func (c *client) Decrement(cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error) {
 	return v10.Decrement(c.client, cacheName, key, init, delta)
