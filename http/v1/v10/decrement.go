@@ -42,7 +42,7 @@ func Decrement(c client.Client, cacheName string, key string, init *int64, delta
 	res := &responseDecrement{}
 	err = json.Unmarshal(b, res)
 	if err != nil {
-		return 0, "", types.SessionTokenNil, errors.Wrap(err, "Can't unmarshal respone to responseLog")
+		return 0, "", types.SessionTokenNil, errors.Wrap(err, "Can't unmarshal respone to responseDecrement")
 	}
 
 	if c.IsFailed(res.SuccessStatus) {
