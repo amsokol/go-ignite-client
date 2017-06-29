@@ -10,7 +10,7 @@
         "blang",
         "uint",
         "decr",
-        "uuid"
+        "incr"
     ],
     "go.lintOnSave": "workspace",
     "go.vetOnSave": "workspace",

@@ -12,11 +12,13 @@ func main() {
 
 	c := ignite.Open(servers, "", "") // no login and password
 
+	// get version
 	v, _, err := c.Version()
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Server version is", v)
+	log.Println("Version returned:")
+	log.Println("version=", v)
 
 	// show server log from line 10
 	from := 10
@@ -25,7 +27,29 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Server log is", lg)
+	log.Println("")
+	log.Println("Log returned:")
+	log.Println("log=", lg)
+
+	// decrement atomic long
+	v64, nodeID, _, err := c.Decrement("Person", "sequence", nil, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("")
+	log.Println("Decrement returned:")
+	log.Println("value=", v64)
+	log.Println("affinityNodeId=", nodeID)
+
+	// increment atomic long
+	v64, nodeID, _, err = c.Increment("Person", "sequence", nil, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("")
+	log.Println("Increment returned:")
+	log.Println("value=", v64)
+	log.Println("affinityNodeId=", nodeID)
 
 	_, _, err = c.SQLFieldsQueryExecute("Person", 1000, `DELETE FROM Person`, url.Values{})
 	if err != nil {
