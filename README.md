@@ -15,7 +15,7 @@
 
 ### SQL driver (`ignite-sql-http`) for Apache Ignite HTTP REST API:
 ```
-go get -u github.com/amsokol/go-ignite-client/sql/http
+# go get -u github.com/amsokol/go-ignite-client/sql/http
 ```
 See [example](https://github.com/amsokol/go-ignite-client/tree/master/cmd/example-http-sql)
 #### Data base configuration string json format:
@@ -58,7 +58,12 @@ Specification:
 | java.util.Date      | time.Time   |
 
 ### Apache Ignite HTTP REST API client:
+See [https://apacheignite.readme.io/docs/rest-api](https://apacheignite.readme.io/docs/rest-api) for API specification
 ```
-go get -u github.com/amsokol/go-ignite-client/http
+# go get -u github.com/amsokol/go-ignite-client/http/v2
+
+or if you want use v1 API:
+
+# go get -u github.com/amsokol/go-ignite-client/http/v1
 ```
 See [example](https://github.com/amsokol/go-ignite-client/tree/master/cmd/example-http-client)
