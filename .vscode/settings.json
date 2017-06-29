@@ -8,7 +8,9 @@
         "qrycls",
         "semver",
         "blang",
-        "uint"
+        "uint",
+        "decr",
+        "uuid"
     ],
     "go.lintOnSave": "workspace",
     "go.vetOnSave": "workspace",
