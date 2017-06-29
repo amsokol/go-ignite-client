@@ -32,7 +32,7 @@ func main() {
 	log.Println("log=", lg)
 
 	// decrement atomic long
-	v64, nodeID, _, err := c.Decrement("Person", "sequence", nil, 1)
+	v64, nodeID, _, err := c.Decrement("Person", "sequence", nil, 10)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func main() {
 	log.Println("affinityNodeId=", nodeID)
 
 	// increment atomic long
-	v64, nodeID, _, err = c.Increment("Person", "sequence", nil, 1)
+	v64, nodeID, _, err = c.Increment("Person", "sequence", nil, 100)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,31 +51,39 @@ func main() {
 	log.Println("value=", v64)
 	log.Println("affinityNodeId=", nodeID)
 
+	// show metrics for Ignite cache
+	m, nodeID, _, err := c.CacheMetrics("Person", "")
+	log.Println("")
+	log.Println("CacheMetrics returned:")
+	log.Println("metrics=", m)
+	log.Println("affinityNodeId=", nodeID)
+
 	_, _, err = c.SQLFieldsQueryExecute("Person", 1000, `DELETE FROM Person`, url.Values{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Deleted all rows from Person")
 	log.Println("")
+	log.Println("Deleted all rows from Person")
 
 	_, _, err = c.SQLFieldsQueryExecute("Organization", 1000, `DELETE FROM Organization`, url.Values{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Deleted all rows from Organization")
 	log.Println("")
+	log.Println("Deleted all rows from Organization")
 
 	_, _, err = c.SQLFieldsQueryExecute("Organization", 1000, `INSERT INTO Organization(_key, name) VALUES(1, 'Org 1')`, url.Values{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Added one record to Organization")
 	log.Println("")
+	log.Println("Added one record to Organization")
 
 	r, _, err := c.SQLFieldsQueryExecute("Organization", 1000, `SELECT _key, name FROM  Organization`, url.Values{})
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("")
 	log.Println("Organizations:")
 	log.Println(r)
 }

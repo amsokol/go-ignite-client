@@ -34,3 +34,15 @@ type FieldMetadata struct {
 	FieldName     string `json:"fieldName"`
 	FieldTypeName string `json:"fieldTypeName"`
 }
+
+// CacheMetrics is the response for Cache metrics command
+// See https://apacheignite.readme.io/v1.0/docs/rest-api#section-cache-metrics for more details
+type CacheMetrics struct {
+	CreateTime int64 `json:"createTime"`
+	Hits       int64 `json:"hits"`
+	Misses     int64 `json:"misses"`
+	ReadTime   int64 `json:"readTime"`
+	Reads      int64 `json:"reads"`
+	WriteTime  int64 `json:"writeTime"`
+	Writes     int64 `json:"writes"`
+}

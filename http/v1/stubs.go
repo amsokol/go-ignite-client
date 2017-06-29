@@ -15,6 +15,7 @@ type Client interface {
 	Version() (types.Version, types.SessionToken, error)
 	Decrement(cacheName string, key string, init *int64, delta int64) (value int64, affinityNodeID string, sessionToken types.SessionToken, err error)
 	Increment(cacheName string, key string, init *int64, delta int64) (value int64, affinityNodeID string, sessionToken types.SessionToken, err error)
+	CacheMetrics(cacheName string, destID string) (metrics types.CacheMetrics, affinityNodeID string, sessionToken types.SessionToken, err error)
 	SQLQueryClose(queryID string) (bool, types.SessionToken, error)
 	SQLQueryFetch(pageSize int64, queryID string) (*types.SQLQueryResult, types.SessionToken, error)
 	SQLFieldsQueryExecute(cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error)
@@ -49,6 +50,13 @@ func (c *client) Decrement(cacheName string, key string, init *int64, delta int6
 func (c *client) Increment(cacheName string, key string, init *int64, delta int64) (
 	value int64, affinityNodeID string, sessionToken types.SessionToken, err error) {
 	return v10.Increment(c.client, cacheName, key, init, delta)
+}
+
+// CacheMetrics shows metrics for Ignite cache
+// See https://apacheignite.readme.io/v1.0/docs/rest-api#section-cache-metrics for more details
+func (c *client) CacheMetrics(cacheName string, destID string) (
+	metrics types.CacheMetrics, affinityNodeID string, sessionToken types.SessionToken, err error) {
+	return v10.CacheMetrics(c.client, cacheName, destID)
 }
 
 // SQLQueryClose closes query resources
