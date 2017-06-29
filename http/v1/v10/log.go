@@ -20,14 +20,18 @@ type responseLog struct {
 
 // Log command shows server logs
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#log for more details
-func Log(c client.Client, path string, from int, to int) (string, types.SessionToken, error) {
+func Log(c client.Client, path string, from *int, to *int) (log string, sessionToken types.SessionToken, err error) {
 	v := url.Values{}
 	v.Add("cmd", "log")
 	if len(path) > 0 {
 		v.Add("path", path)
 	}
-	v.Add("from", strconv.FormatInt(int64(from), 10))
-	v.Add("to", strconv.FormatInt(int64(to), 10))
+	if from != nil {
+		v.Add("from", strconv.FormatInt(int64(*from), 10))
+	}
+	if from != nil {
+		v.Add("to", strconv.FormatInt(int64(*to), 10))
+	}
 
 	b, err := c.Execute(v)
 	if err != nil {

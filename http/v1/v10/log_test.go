@@ -9,11 +9,13 @@ import (
 )
 
 func TestLog(t *testing.T) {
+	from := 10
+	to := 15
 	type args struct {
 		c    client.Client
 		path string
-		from int
-		to   int
+		from *int
+		to   *int
 	}
 
 	tests := []struct {
@@ -27,8 +29,8 @@ func TestLog(t *testing.T) {
 			name: "Get log from 10 to 15 line",
 			args: args{
 				c:    client.Open([]string{"http://localhost:8080/ignite"}, "", ""),
-				from: 10,
-				to:   15,
+				from: &from,
+				to:   &to,
 			},
 		},
 	}

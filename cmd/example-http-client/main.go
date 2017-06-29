@@ -19,7 +19,9 @@ func main() {
 	log.Println("Server version is", v)
 
 	// show server log from line 10
-	lg, _, err := c.Log("", 10, 15)
+	from := 10
+	to := 15
+	lg, _, err := c.Log("", &from, &to)
 	if err != nil {
 		log.Fatal(err)
 	}
