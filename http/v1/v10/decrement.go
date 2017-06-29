@@ -21,7 +21,8 @@ type responseDecrement struct {
 
 // Decrement command subtracts and gets current value of given atomic long
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
-func Decrement(c client.Client, cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error) {
+func Decrement(c client.Client, cacheName string, key string, init *int64, delta int64) (
+	value int64, affinityNodeID string, sessionToken types.SessionToken, err error) {
 	v := url.Values{}
 	v.Add("cmd", "decr")
 	if len(cacheName) > 0 {

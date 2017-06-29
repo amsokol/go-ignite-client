@@ -13,7 +13,7 @@ import (
 type Client interface {
 	Log(path string, from *int, to *int) (string, types.SessionToken, error)
 	Version() (types.Version, types.SessionToken, error)
-	Decrement(cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error)
+	Decrement(cacheName string, key string, init *int64, delta int64) (value int64, affinityNodeID string, sessionToken types.SessionToken, err error)
 	SQLQueryClose(queryID string) (bool, types.SessionToken, error)
 	SQLQueryFetch(pageSize int64, queryID string) (*types.SQLQueryResult, types.SessionToken, error)
 	SQLFieldsQueryExecute(cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error)
@@ -38,7 +38,8 @@ func (c *client) Version() (types.Version, types.SessionToken, error) {
 
 // Decrement command subtracts and gets current value of given atomic long
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
-func (c *client) Decrement(cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error) {
+func (c *client) Decrement(cacheName string, key string, init *int64, delta int64) (
+	value int64, affinityNodeID string, sessionToken types.SessionToken, err error) {
 	return v10.Decrement(c.client, cacheName, key, init, delta)
 }
 
