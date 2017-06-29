@@ -24,7 +24,9 @@ type responseDecrement struct {
 func Decrement(c client.Client, cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error) {
 	v := url.Values{}
 	v.Add("cmd", "decr")
-	v.Add("cacheName", cacheName)
+	if len(cacheName) > 0 {
+		v.Add("cacheName", cacheName)
+	}
 	v.Add("key", key)
 	if init != nil {
 		v.Add("init", strconv.FormatInt(int64(*init), 10))
