@@ -13,6 +13,7 @@ import (
 type Client interface {
 	Log(path string, from int, to int) (string, types.SessionToken, error)
 	Version() (types.Version, types.SessionToken, error)
+	Decrement(cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error)
 	SQLQueryClose(queryID string) (bool, types.SessionToken, error)
 	SQLQueryFetch(pageSize int64, queryID string) (*types.SQLQueryResult, types.SessionToken, error)
 	SQLFieldsQueryExecute(cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error)
@@ -33,6 +34,12 @@ func (c *client) Log(path string, from int, to int) (string, types.SessionToken,
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-version for more details
 func (c *client) Version() (types.Version, types.SessionToken, error) {
 	return v10.Version(c.client)
+}
+
+// Decrement is response for `decr` command
+// See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
+func (c *client) Decrement(cacheName string, key string, init *int64, delta int64) (int64, string, types.SessionToken, error) {
+	return v10.Decrement(c.client, cacheName, key, init, delta)
 }
 
 // SQLQueryClose closes query resources
