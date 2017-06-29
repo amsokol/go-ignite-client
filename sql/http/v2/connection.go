@@ -80,7 +80,7 @@ func (c *conn) Ping(ctx context.Context) error {
 		return driver.ErrBadConn
 	}
 
-	_, _, err := c.client.GetVersion()
+	_, _, err := c.client.Version()
 	return err
 }
 

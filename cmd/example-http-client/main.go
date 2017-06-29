@@ -3,20 +3,27 @@ package main
 import (
 	"log"
 
-	"github.com/amsokol/go-ignite-client/http/v2"
+	ignite "github.com/amsokol/go-ignite-client/http/v2"
 	"net/url"
 )
 
 func main() {
 	servers := []string{"http://localhost:8080/ignite"}
 
-	c := v2.Open(servers, "", "") // no login and password
+	c := ignite.Open(servers, "", "") // no login and password
 
-	v, _, err := c.GetVersion()
+	v, _, err := c.Version()
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Server version is", v)
+
+	// show server log from line 10
+	lg, _, err := c.Log("", 10, 15)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Server log is", lg)
 
 	_, _, err = c.SQLFieldsQueryExecute("Person", 1000, `DELETE FROM Person`, url.Values{})
 	if err != nil {

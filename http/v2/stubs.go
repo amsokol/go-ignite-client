@@ -11,7 +11,8 @@ import (
 
 // Client is the interface providing the methods to execute REST API commands
 type Client interface {
-	GetVersion() (types.Version, types.SessionToken, error)
+	Log(path string, from int, to int) (string, types.SessionToken, error)
+	Version() (types.Version, types.SessionToken, error)
 	SQLQueryClose(queryID string) (bool, types.SessionToken, error)
 	SQLQueryFetch(pageSize int64, queryID string) (*types.SQLQueryResult, types.SessionToken, error)
 	SQLFieldsQueryExecute(cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error)
@@ -22,9 +23,15 @@ type client struct {
 	client v1.Client
 }
 
-// GetVersion command shows current Ignite version.
+// Log command shows server logs
+// See https://apacheignite.readme.io/v1.0/docs/rest-api#log for more details
+func (c *client) Log(path string, from int, to int) (string, types.SessionToken, error) {
+	return v10.Log(c.client, path, from, to)
+}
+
+// Version command shows current Ignite version.
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-version for more details
-func (c *client) GetVersion() (types.Version, types.SessionToken, error) {
+func (c *client) Version() (types.Version, types.SessionToken, error) {
 	return v10.Version(c.client)
 }
 
