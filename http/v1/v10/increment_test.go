@@ -25,7 +25,7 @@ func TestIncrement(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "Decrement atomic long",
+			name: "Increment atomic long",
 			args: args{
 				c:         client.Open([]string{"http://localhost:8080/ignite"}, "", ""),
 				cacheName: "Person",
