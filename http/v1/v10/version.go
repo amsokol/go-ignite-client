@@ -34,7 +34,7 @@ func Version(c client.Client) (types.Version, types.SessionToken, error) {
 	res := &responseVersion{}
 	err = json.Unmarshal(b, res)
 	if err != nil {
-		return types.Version{}, types.SessionTokenNil, errors.Wrap(err, "Can't unmarshal respone to ResponseVersion")
+		return types.Version{}, types.SessionTokenNil, errors.Wrap(err, "Can't unmarshal respone to responseVersion")
 	}
 
 	if c.IsFailed(res.SuccessStatus) {
