@@ -14,10 +14,8 @@ import (
 // responseVersion is response for `version` command
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-version for more details
 type responseVersion struct {
-	SuccessStatus types.SuccessStatus `json:"successStatus"`
-	Error         string              `json:"error"`
-	Version       string              `json:"response"`
-	SessionToken  types.SessionToken  `json:"sessionToken"`
+	response
+	Version string `json:"response"`
 }
 
 // Version command shows current Ignite version.

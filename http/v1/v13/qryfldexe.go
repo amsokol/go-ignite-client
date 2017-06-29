@@ -13,10 +13,8 @@ import (
 // responseSQLFieldsQueryExecute is response for `qryfldexe`, commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
 type responseSQLFieldsQueryExecute struct {
-	SuccessStatus types.SuccessStatus  `json:"successStatus"`
-	Error         string               `json:"error"`
-	Response      types.SQLQueryResult `json:"response"`
-	SessionToken  types.SessionToken   `json:"sessionToken"`
+	response
+	Response types.SQLQueryResult `json:"response"`
 }
 
 // SQLFieldsQueryExecute runs sql fields query over cache.

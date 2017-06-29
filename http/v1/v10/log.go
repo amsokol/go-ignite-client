@@ -14,10 +14,8 @@ import (
 // responseVersion is response for `log` command
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#log for more details
 type responseLog struct {
-	SuccessStatus types.SuccessStatus `json:"successStatus"`
-	Error         string              `json:"error"`
-	Log           string              `json:"response"`
-	SessionToken  types.SessionToken  `json:"sessionToken"`
+	response
+	Log string `json:"response"`
 }
 
 // Log command shows server logs

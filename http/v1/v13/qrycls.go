@@ -13,10 +13,8 @@ import (
 // responseSQLQueryClose is response for `qrycls` commands
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
 type responseSQLQueryClose struct {
-	SuccessStatus types.SuccessStatus `json:"successStatus"`
-	Error         string              `json:"error"`
-	Response      bool                `json:"response"`
-	SessionToken  types.SessionToken  `json:"sessionToken"`
+	response
+	Response bool `json:"response"`
 }
 
 // SQLQueryClose closes query resources
