@@ -76,6 +76,12 @@ func (c *client) Append(cache string, key string, val string, destID string) (ok
 	return c.client.Append(cache, key, val, destID)
 }
 
+// Replace stores a given key-value pair in cache only if there is a previous mapping for it
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-replace for more details
+func (c *client) Replace(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error) {
+	return c.client.Replace(cache, key, val, destID)
+}
+
 // SQLQueryClose closes query resources
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-sql-query-close for more details
 func (c *client) SQLQueryClose(queryID int64) (ok bool, token string, err error) {
