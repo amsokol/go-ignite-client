@@ -19,7 +19,7 @@ func Test_client_Append(t *testing.T) {
 		wantErr    bool
 	}{
 		{
-			name: "Try to replace value in cache that is not existed",
+			name: "1",
 			c:    NewClient([]string{"http://localhost:8080/ignite"}, "", ""),
 			args: args{
 				cache: "Cache1",
