@@ -13,6 +13,8 @@ type Client interface {
 	Decrement(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error)
 	Increment(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error)
 	GetCacheMetrics(cache string, destID string) (metrics core.CacheMetrics, nodeID string, token string, err error)
+	CompareAndSwap(cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error)
+	Prepend(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error)
 	SQLQueryClose(queryID int64) (ok bool, token string, err error)
 	SQLQueryFetch(pageSize int64, queryID int64) (result core.SQLQueryResult, token string, err error)
 	SQLFieldsQueryExecute(cache string, pageSize int64, query string, args url.Values) (result core.SQLQueryResult, token string, err error)
