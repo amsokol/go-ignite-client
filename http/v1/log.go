@@ -9,7 +9,7 @@ import (
 )
 
 // Log command shows server logs
-// See https://apacheignite.readme.io/v1.0/docs/rest-api#log for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#log for more details
 func (c *client) GetLog(path string, from *int, to *int) (log string, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "log")

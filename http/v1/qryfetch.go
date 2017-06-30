@@ -11,7 +11,7 @@ import (
 )
 
 // SQLQueryFetch gets next page for the query
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-fetch for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-sql-query-fetch for more details
 func (c *client) SQLQueryFetch(pageSize int64, queryID int64) (result core.SQLQueryResult, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "qryfetch")

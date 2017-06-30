@@ -8,7 +8,7 @@ import (
 )
 
 // Version command shows current Ignite version.
-// See https://apacheignite.readme.io/v1.0/docs/rest-api#section-version for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-version for more details
 func (c *client) GetVersion() (version string, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "version")

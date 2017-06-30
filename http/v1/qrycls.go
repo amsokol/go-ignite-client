@@ -9,7 +9,7 @@ import (
 )
 
 // SQLQueryClose closes query resources
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-sql-query-close for more details
 func (c *client) SQLQueryClose(queryID int64) (ok bool, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "qrycls")

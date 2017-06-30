@@ -9,7 +9,7 @@ import (
 )
 
 // Decrement command subtracts and gets current value of given atomic long
-// See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-decrement for more details
 func (c *client) Decrement(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "decr")

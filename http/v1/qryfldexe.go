@@ -11,7 +11,7 @@ import (
 )
 
 // SQLFieldsQueryExecute runs sql fields query over cache.
-// See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-sql-fields-query-execute for more details
 func (c *client) SQLFieldsQueryExecute(cache string, pageSize int64, query string, args url.Values) (result core.SQLQueryResult, token string, err error) {
 	if args == nil {
 		args = url.Values{}

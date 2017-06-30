@@ -10,7 +10,7 @@ import (
 )
 
 // CacheMetrics shows metrics for Ignite cache
-// See https://apacheignite.readme.io/v1.0/docs/rest-api#section-cache-metrics for more details
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-cache-metrics for more details
 func (c *client) GetCacheMetrics(cache string, destID string) (metrics core.CacheMetrics, nodeID string, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "cache")
