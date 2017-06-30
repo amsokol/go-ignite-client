@@ -11,7 +11,6 @@ func TestJavaTime_UnmarshalJSON(t *testing.T) {
 		Data *JavaTime `json:"data"`
 	}
 	jtt := JavaTimeTest{}
-	data := `{"data" : 1415179251551}`
 
 	type args struct {
 		data []byte
@@ -26,8 +25,16 @@ func TestJavaTime_UnmarshalJSON(t *testing.T) {
 			name: "Parse date 1415179251551",
 			t:    &jtt,
 			args: args{
-				data: []byte(data),
+				data: []byte(`{"data" : 1415179251551}`),
 			},
+		},
+		{
+			name: "Parse invalid date",
+			t:    &jtt,
+			args: args{
+				data: []byte(`{"data" : qwerty}`),
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
