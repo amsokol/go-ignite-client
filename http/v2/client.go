@@ -16,6 +16,7 @@ type Client interface {
 	GetCacheMetrics(cache string, destID string) (metrics core.CacheMetrics, nodeID string, token string, err error)
 	CompareAndSwap(cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error)
 	Prepend(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error)
+	Append(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error)
 	SQLQueryClose(queryID int64) (ok bool, token string, err error)
 	SQLQueryFetch(pageSize int64, queryID int64) (result core.SQLQueryResult, token string, err error)
 	SQLFieldsQueryExecute(cache string, pageSize int64, query string, args url.Values) (result core.SQLQueryResult, token string, err error)
@@ -67,6 +68,12 @@ func (c *client) CompareAndSwap(cache string, key string, val string, val2 strin
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-prepend for more details
 func (c *client) Prepend(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error) {
 	return c.client.Prepend(cache, key, val, destID)
+}
+
+// Append appends a line for value which is associated with key
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-append for more details
+func (c *client) Append(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error) {
+	return c.client.Append(cache, key, val, destID)
 }
 
 // SQLQueryClose closes query resources
