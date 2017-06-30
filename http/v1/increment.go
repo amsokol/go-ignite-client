@@ -29,7 +29,7 @@ func (c *client) Increment(cache string, key string, init *int64, delta int64) (
 
 	err = json.Unmarshal(b, &value)
 	if err != nil {
-		return value, nodeID, token, errors.Wrap(err, "Can't unmarshal respone to responseIncrement")
+		return value, nodeID, token, errors.Wrap(err, "Can't unmarshal respone to int64")
 	}
 
 	return value, nodeID, token, nil
