@@ -35,8 +35,8 @@ func TestJavaTime_UnmarshalJSON(t *testing.T) {
 			if err := json.Unmarshal(tt.args.data, tt.t); (err != nil) != tt.wantErr {
 				t.Errorf("json.Unmarshal([]byte, JavaTimeTest) error = %v, wantErr %v", err, tt.wantErr)
 			}
-			if jtt.Data.Time.Year() != 2014 || jtt.Data.Time.Month() != time.November || jtt.Data.Time.Day() != 5 {
-				t.Errorf("json.Unmarshal([]byte, JavaTimeTest) returns invalid result = %v", jtt.Data.Time)
+			if jtt.Data.Year() != 2014 || jtt.Data.Month() != time.November || jtt.Data.Day() != 5 {
+				t.Errorf("json.Unmarshal([]byte, JavaTimeTest) returns invalid result = %v", jtt.Data)
 			}
 			t.Log("")
 			t.Logf("http.v1.JavaTime.UnmarshalJSON returned for '%s':", tt.name)

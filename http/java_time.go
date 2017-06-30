@@ -3,11 +3,12 @@ package http
 import (
 	"strconv"
 	"time"
+	"unsafe"
 )
 
 // JavaTime is time in Java format
 type JavaTime struct {
-	Time time.Time
+	time.Time
 }
 
 // UnmarshalJSON is unmarshaler for JavaTime
@@ -16,6 +17,7 @@ func (t *JavaTime) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	*t = JavaTime{Time: time.Unix(0, m*int64(time.Millisecond))}
+	gt := time.Unix(0, m*int64(time.Millisecond))
+	*t = *(*JavaTime)(unsafe.Pointer(&gt))
 	return nil
 }
