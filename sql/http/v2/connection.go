@@ -3,7 +3,6 @@ package v2
 import (
 	"context"
 	"database/sql/driver"
-	"strconv"
 
 	"github.com/pkg/errors"
 
@@ -22,7 +21,7 @@ type conn struct {
 
 // Open returns connection
 func Open(servers []string, username string, password string, cache string, pageSize int64) sql.Conn {
-	return &conn{cache: cache, pageSize: pageSize, client: v2.Open(servers, username, password)}
+	return &conn{cache: cache, pageSize: pageSize, client: v2.NewClient(servers, username, password)}
 }
 
 // See https://golang.org/pkg/database/sql/driver/#Conn for more details
@@ -80,7 +79,7 @@ func (c *conn) Ping(ctx context.Context) error {
 		return driver.ErrBadConn
 	}
 
-	_, _, err := c.client.Version()
+	_, _, err := c.client.GetVersion()
 	return err
 }
 
@@ -115,12 +114,12 @@ func (c *conn) QueryContext(ctx context.Context, query string, args []driver.Nam
 
 	return &sql.Rows{Connection: c,
 		ColumnsRaw: columns,
-		QueryID:    strconv.FormatInt(res.QueryID, 10),
+		QueryID:    res.QueryID,
 		ResultSet:  c.getResultSet(data, res.Last)}, nil
 }
 
 // fetchContext gets next page for the query
-func (c *conn) FetchContext(ctx context.Context, queryID string, columns []sql.Column) (*sql.ResultSet, error) {
+func (c *conn) FetchContext(ctx context.Context, queryID int64, columns []sql.Column) (*sql.ResultSet, error) {
 	if c.client == nil {
 		return nil, driver.ErrBadConn
 	}
@@ -140,7 +139,7 @@ func (c *conn) FetchContext(ctx context.Context, queryID string, columns []sql.C
 }
 
 // closeQueryContext closes query resources
-func (c *conn) CloseQueryContext(ctx context.Context, queryID string) error {
+func (c *conn) CloseQueryContext(ctx context.Context, queryID int64) error {
 	if c.client == nil {
 		return driver.ErrBadConn
 	}

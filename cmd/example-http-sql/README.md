@@ -6,17 +6,40 @@
 
 3. Copy or move folder `ignite-rest-http` from `<path_with_ignite>/libs/optional/`  to `<path_with_ignite>/libs/`. It enables Ignite HTTP REST API.
 
-4. `cd` to folder with current example files
+4. `cd` to your work folder
 
-5. Start Ignite server with configuration files from this example:
-```shell
+5. Clone project from GitHub:
+```
+git clone https://github.com/amsokol/go-ignite-client.git
+```
+
+6. Go to `cmd` folder where `example.xml` is located:
+```
 For Windows:
-<path_with_ignite>\bin\ignite.bat .\example-http-sql.xml
+cd .\go-ignite-client\cmd
 
 For Linux:
-<path_with_ignite>/bin/ignite.sh ./example-http-sql.xml
+cd ./go-ignite-client/cmd
 ```
-6. Run example:
+
+7. Start Ignite server with required configuration:
+```
+For Windows:
+<path_with_ignite>\bin\ignite.bat .\example.xml
+
+For Linux:
+<path_with_ignite>/bin/ignite.sh ./example.xml
+```
+8. `cd` to folder with example:
+```
+For Windows:
+cd .\example-http-sql
+
+For Linux:
+cd ./example-http-sql
+```
+
+9. Run example
 ```
 go run main.go
 ```

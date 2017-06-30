@@ -1,5 +1,5 @@
 # go-ignite-client
-## Apache Ignite (GridGain) go language native client and SQL driver
+## Apache Ignite (GridGain) go language client and SQL driver
 
 ### Requirements:
 - Apache Ignite v1.3+
@@ -7,11 +7,19 @@
 
 ### Road map:
 1. Develop SQL driver (`ignite-sql-http`) for Apache Ignite HTTP REST API (In progress)
-2. Develop SQL driver (`ignite-sql-native`) for Apache Ignite protocol (Not started)
+2. Develop SQL driver (`ignite-sql-native`) for Apache Ignite protocol (Not started).
+Apache Ignite has no `native` platform-independent communication protocol yet.
 
-### Issues:
-- `ignite-sql-http` SQL driver does not support transactions (Ignite HTTP REST API does not support transactions)
-- Only 4 methods (are needed for SQL driver) of REST API are implemented now
+### Apache Ignite HTTP REST API client:
+See [https://apacheignite.readme.io/docs/rest-api](https://apacheignite.readme.io/docs/rest-api) for API specification
+```
+# go get -u github.com/amsokol/go-ignite-client/http/v2
+
+or if you want use v1 API:
+
+# go get -u github.com/amsokol/go-ignite-client/http/v1
+```
+See [example](https://github.com/amsokol/go-ignite-client/tree/master/cmd/example-http-client)
 
 ### SQL driver (`ignite-sql-http`) for Apache Ignite HTTP REST API:
 ```
@@ -57,13 +65,5 @@ Specification:
 | java.sql.Timestamp  | time.Time   |
 | java.util.Date      | time.Time   |
 
-### Apache Ignite HTTP REST API client:
-See [https://apacheignite.readme.io/docs/rest-api](https://apacheignite.readme.io/docs/rest-api) for API specification
-```
-# go get -u github.com/amsokol/go-ignite-client/http/v2
-
-or if you want use v1 API:
-
-# go get -u github.com/amsokol/go-ignite-client/http/v1
-```
-See [example](https://github.com/amsokol/go-ignite-client/tree/master/cmd/example-http-client)
+#### Issues:
+- `ignite-sql-http` SQL driver does not support transactions (Ignite HTTP REST API does not support transactions)

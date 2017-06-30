@@ -3,22 +3,21 @@ package v2
 import (
 	"net/url"
 
-	"github.com/amsokol/go-ignite-client/http/types"
-	v1 "github.com/amsokol/go-ignite-client/http/v1/client"
-	"github.com/amsokol/go-ignite-client/http/v1/v10"
-	"github.com/amsokol/go-ignite-client/http/v1/v13"
+	core "github.com/amsokol/go-ignite-client/http"
+	"github.com/amsokol/go-ignite-client/http/v1"
 )
 
 // Client is the interface providing the methods to execute REST API commands
 type Client interface {
-	Log(path string, from *int, to *int) (string, types.SessionToken, error)
-	Version() (types.Version, types.SessionToken, error)
-	Decrement(cacheName string, key string, init *int64, delta int64) (value int64, affinityNodeID string, sessionToken types.SessionToken, err error)
-	Increment(cacheName string, key string, init *int64, delta int64) (value int64, affinityNodeID string, sessionToken types.SessionToken, err error)
-	CacheMetrics(cacheName string, destID string) (metrics types.CacheMetrics, affinityNodeID string, sessionToken types.SessionToken, err error)
-	SQLQueryClose(queryID string) (bool, types.SessionToken, error)
-	SQLQueryFetch(pageSize int64, queryID string) (*types.SQLQueryResult, types.SessionToken, error)
-	SQLFieldsQueryExecute(cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error)
+	GetLog(path string, from *int, to *int) (log string, token string, err error)
+	GetVersion() (version string, token string, err error)
+	Decrement(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error)
+	Increment(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error)
+	GetCacheMetrics(cache string, destID string) (metrics core.CacheMetrics, nodeID string, token string, err error)
+	SQLQueryClose(queryID int64) (ok bool, token string, err error)
+	SQLQueryFetch(pageSize int64, queryID int64) (result core.SQLQueryResult, token string, err error)
+	SQLFieldsQueryExecute(cache string, pageSize int64, query string, args url.Values) (result core.SQLQueryResult, token string, err error)
+	Close() (err error)
 }
 
 // Client is providing the methods to execute REST API commands
@@ -28,56 +27,57 @@ type client struct {
 
 // Log command shows server logs
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#log for more details
-func (c *client) Log(path string, from *int, to *int) (string, types.SessionToken, error) {
-	return v10.Log(c.client, path, from, to)
+func (c *client) GetLog(path string, from *int, to *int) (log string, token string, err error) {
+	return c.client.GetLog(path, from, to)
 }
 
 // Version command shows current Ignite version.
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-version for more details
-func (c *client) Version() (types.Version, types.SessionToken, error) {
-	return v10.Version(c.client)
+func (c *client) GetVersion() (version string, token string, err error) {
+	return c.client.GetVersion()
 }
 
 // Decrement command subtracts and gets current value of given atomic long
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-decrement for more details
-func (c *client) Decrement(cacheName string, key string, init *int64, delta int64) (
-	value int64, affinityNodeID string, sessionToken types.SessionToken, err error) {
-	return v10.Decrement(c.client, cacheName, key, init, delta)
+func (c *client) Decrement(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error) {
+	return c.client.Decrement(cache, key, init, delta)
 }
 
 // Increment command adds and gets current value of given atomic long
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-increment for more details
-func (c *client) Increment(cacheName string, key string, init *int64, delta int64) (
-	value int64, affinityNodeID string, sessionToken types.SessionToken, err error) {
-	return v10.Increment(c.client, cacheName, key, init, delta)
+func (c *client) Increment(cache string, key string, init *int64, delta int64) (value int64, nodeID string, token string, err error) {
+	return c.client.Increment(cache, key, init, delta)
 }
 
 // CacheMetrics shows metrics for Ignite cache
 // See https://apacheignite.readme.io/v1.0/docs/rest-api#section-cache-metrics for more details
-func (c *client) CacheMetrics(cacheName string, destID string) (
-	metrics types.CacheMetrics, affinityNodeID string, sessionToken types.SessionToken, err error) {
-	return v10.CacheMetrics(c.client, cacheName, destID)
+func (c *client) GetCacheMetrics(cache string, destID string) (metrics core.CacheMetrics, nodeID string, token string, err error) {
+	return c.client.GetCacheMetrics(cache, destID)
 }
 
 // SQLQueryClose closes query resources
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-close for more details
-func (c *client) SQLQueryClose(queryID string) (bool, types.SessionToken, error) {
-	return v13.SQLQueryClose(c.client, queryID)
+func (c *client) SQLQueryClose(queryID int64) (ok bool, token string, err error) {
+	return c.client.SQLQueryClose(queryID)
 }
 
 // SQLQueryFetch gets next page for the query
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-query-fetch for more details
-func (c *client) SQLQueryFetch(pageSize int64, queryID string) (*types.SQLQueryResult, types.SessionToken, error) {
-	return v13.SQLQueryFetch(c.client, pageSize, queryID)
+func (c *client) SQLQueryFetch(pageSize int64, queryID int64) (result core.SQLQueryResult, token string, err error) {
+	return c.client.SQLQueryFetch(pageSize, queryID)
 }
 
 // SQLFieldsQueryExecute runs sql fields query over cache.
 // See https://apacheignite.readme.io/v1.3/docs/rest-api#section-sql-fields-query-execute for more details
-func (c *client) SQLFieldsQueryExecute(cacheName string, pageSize int64, query string, args url.Values) (*types.SQLQueryResult, types.SessionToken, error) {
-	return v13.SQLFieldsQueryExecute(c.client, cacheName, pageSize, query, args)
+func (c *client) SQLFieldsQueryExecute(cache string, pageSize int64, query string, args url.Values) (result core.SQLQueryResult, token string, err error) {
+	return c.client.SQLFieldsQueryExecute(cache, pageSize, query, args)
 }
 
-// Open returns client
-func Open(servers []string, username string, password string) Client {
-	return &client{client: v1.Open(servers, username, password)}
+func (c *client) Close() (err error) {
+	return c.Close()
+}
+
+// NewClient returns new client
+func NewClient(servers []string, username string, password string) Client {
+	return v1.NewClient(servers, username, password)
 }

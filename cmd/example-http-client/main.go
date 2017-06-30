@@ -10,10 +10,10 @@ import (
 func main() {
 	servers := []string{"http://localhost:8080/ignite"}
 
-	c := ignite.Open(servers, "", "") // no login and password
+	c := ignite.NewClient(servers, "", "") // no login and password
 
 	// get version
-	v, _, err := c.Version()
+	v, _, err := c.GetVersion()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func main() {
 	// show server log from line 10
 	from := 10
 	to := 15
-	lg, _, err := c.Log("", &from, &to)
+	lg, _, err := c.GetLog("", &from, &to)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func main() {
 	log.Println("affinityNodeId=", nodeID)
 
 	// show metrics for Ignite cache
-	m, nodeID, _, err := c.CacheMetrics("Person", "")
+	m, nodeID, _, err := c.GetCacheMetrics("Person", "")
 	log.Println("")
 	log.Println("CacheMetrics returned:")
 	log.Println("metrics=", m)

@@ -24,7 +24,7 @@ type Column struct {
 // Rows is SQL rows struct
 type Rows struct {
 	Connection Conn
-	QueryID    string
+	QueryID    int64
 	ColumnsRaw []Column
 	ResultSet  *ResultSet
 }
@@ -59,10 +59,10 @@ func (r *Rows) ColumnTypeDatabaseTypeName(index int) string {
 func (r *Rows) Close() error {
 	defer func() {
 		r.Connection = nil
-		r.QueryID = ""
+		r.QueryID = 0
 	}()
 
-	if len(r.QueryID) > 0 && r.Connection != nil {
+	if r.QueryID > 0 && r.Connection != nil {
 		return r.Connection.CloseQueryContext(context.Background(), r.QueryID)
 	}
 
