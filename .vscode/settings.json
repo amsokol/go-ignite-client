@@ -13,7 +13,8 @@
         "incr",
         "kvpairs",
         "getorcreate",
-        "along"
+        "along",
+        "rmvall"
     ],
     "go.lintOnSave": "workspace",
     "go.vetOnSave": "workspace",

@@ -34,6 +34,7 @@ type Client interface {
 	CompareAndSwap(cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error)
 	Prepend(cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error)
 	Replace(cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error)
+	RemoveAll(e exec.Executer, cache string, args url.Values, destID string) (ok bool, nodeID string, token string, err error)
 
 	// cache
 	GetOrCreateCache(cache string) (token string, err error)
@@ -123,6 +124,12 @@ func (c *client) Prepend(cache string, key string, val string, destID string) (o
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-replace for more details
 func (c *client) Replace(cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error) {
 	return c.kvpairs.Replace(&c.exec, cache, key, val, val2, destID)
+}
+
+// RemoveAll removes given key mappings from cache
+// See https://apacheignite.readme.io/v1.9/docs/rest-api#section-remove-all for details
+func (c *client) RemoveAll(e exec.Executer, cache string, args url.Values, destID string) (ok bool, nodeID string, token string, err error) {
+	return c.kvpairs.RemoveAll(&c.exec, cache, args, destID)
 }
 
 // GetCacheMetrics shows metrics for Ignite cache
