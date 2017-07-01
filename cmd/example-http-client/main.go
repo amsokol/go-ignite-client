@@ -51,12 +51,14 @@ func main() {
 	log.Println("value=", v64)
 	log.Println("affinityNodeId=", nodeID)
 
-	// show metrics for Ignite cache
-	m, nodeID, _, err := c.GetCacheMetrics("Person", "")
-	log.Println("")
-	log.Println("CacheMetrics returned:")
-	log.Println("metrics=", m)
-	log.Println("affinityNodeId=", nodeID)
+	/*
+		// show metrics for Ignite cache
+		m, nodeID, _, err := c.GetCacheMetrics("Person", "")
+		log.Println("")
+		log.Println("CacheMetrics returned:")
+		log.Println("metrics=", m)
+		log.Println("affinityNodeId=", nodeID)
+	*/
 
 	_, _, err = c.SQLFieldsQueryExecute("Person", 1000, `DELETE FROM Person`, url.Values{})
 	if err != nil {

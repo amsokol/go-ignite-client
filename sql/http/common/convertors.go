@@ -64,7 +64,7 @@ func ItemsToValues(columns []sql.Column, items [][]interface{}) ([][]driver.Valu
 			case "java.sql.Timestamp":
 				// RFC1123 = "Mon, 02 Jan 2006 15:04:05 MST"
 				// Custom:
-				row[j], err = time.Parse("Jan 02, 2006 3:04:05 PM", sv)
+				row[j], err = time.Parse("Jan 2, 2006 3:04:05 PM", sv)
 			// TODO: add binary support
 			default:
 				return nil, errors.New(strings.Join([]string{"Unsupported parameter type", t}, ": "))

@@ -10,7 +10,10 @@
         "blang",
         "uint",
         "decr",
-        "incr"
+        "incr",
+        "kvpairs",
+        "getorcreate",
+        "along"
     ],
     "go.lintOnSave": "workspace",
     "go.vetOnSave": "workspace",
