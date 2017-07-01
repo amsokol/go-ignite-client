@@ -8,7 +8,7 @@ import (
 
 // GetOrCreateCache creates cache with given name if it does not exist
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-get-or-create-cache for more details
-func (c *ManagementImpl) GetOrCreateCache(e exec.Executer, cache string) (token string, err error) {
+func (c *Commands) GetOrCreateCache(e exec.Executer, cache string) (token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "getorcreate")
 	if len(cache) > 0 {

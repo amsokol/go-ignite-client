@@ -11,7 +11,7 @@ import (
 
 // Replace stores a given key-value pair in cache only if there is a previous mapping for it
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-replace for more details
-func (p *KeyValuePairsImpl) Replace(e exec.Executer, cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error) {
+func (p *Commands) Replace(e exec.Executer, cache string, key string, val string, val2 string, destID string) (ok bool, nodeID string, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "rep")
 	if len(cache) > 0 {

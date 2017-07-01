@@ -7,12 +7,12 @@ import (
 	"github.com/amsokol/go-ignite-client/http/v1/exec"
 )
 
-func TestManagementImpl_GetCacheMetrics(t *testing.T) {
+func TestCommands_GetCacheMetrics(t *testing.T) {
 	t.Log("")
-	t.Log("Preparing test data for 'TestManagementImpl_GetCacheMetrics'...")
+	t.Log("Preparing test data for 'TestCommands_GetCacheMetrics'...")
 
 	e := exec.ExecuterImpl{Servers: []string{"http://localhost:8080/ignite"}, Username: "", Password: ""}
-	c := ManagementImpl{}
+	c := Commands{}
 
 	_, err := c.GetOrCreateCache(&e, "Cache4TestGetOrCreateCache")
 	if err != nil {
@@ -28,7 +28,7 @@ func TestManagementImpl_GetCacheMetrics(t *testing.T) {
 	}
 	tests := []struct {
 		name        string
-		c           *ManagementImpl
+		c           *Commands
 		args        args
 		wantMetrics core.CacheMetrics
 		wantNodeID  string
@@ -48,7 +48,7 @@ func TestManagementImpl_GetCacheMetrics(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			gotMetrics, gotNodeID, gotToken, err := tt.c.GetCacheMetrics(tt.args.e, tt.args.cache, tt.args.destID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ManagementImpl.GetCacheMetrics() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Commands.GetCacheMetrics() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			t.Log("")

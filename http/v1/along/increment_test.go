@@ -12,7 +12,7 @@ func TestCommands_Increment(t *testing.T) {
 	t.Log("Preparing test data for 'TestCommands_Increment'...")
 
 	e := exec.ExecuterImpl{Servers: []string{"http://localhost:8080/ignite"}, Username: "", Password: ""}
-	c := cache.ManagementImpl{}
+	c := cache.Commands{}
 
 	_, err := c.DestroyCache(&e, "TestAtomicLongs")
 	if err != nil {

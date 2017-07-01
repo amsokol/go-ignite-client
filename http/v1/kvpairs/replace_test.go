@@ -7,12 +7,12 @@ import (
 	"github.com/amsokol/go-ignite-client/http/v1/exec"
 )
 
-func TestKeyValuePairsImpl_Replace(t *testing.T) {
+func TestCommands_Replace(t *testing.T) {
 	t.Log("")
-	t.Log("Preparing test data for 'TestKeyValuePairsImpl_Replace'...")
+	t.Log("Preparing test data for 'TestCommands_Replace'...")
 
 	e := exec.ExecuterImpl{Servers: []string{"http://localhost:8080/ignite"}, Username: "", Password: ""}
-	c := cache.ManagementImpl{}
+	c := cache.Commands{}
 
 	_, err := c.DestroyCache(&e, "TestKeyValuePairs")
 	if err != nil {
@@ -36,7 +36,7 @@ func TestKeyValuePairsImpl_Replace(t *testing.T) {
 	}
 	tests := []struct {
 		name       string
-		p          *KeyValuePairsImpl
+		p          *Commands
 		args       args
 		wantOk     bool
 		wantNodeID string
@@ -45,7 +45,7 @@ func TestKeyValuePairsImpl_Replace(t *testing.T) {
 	}{
 		{
 			name: "Replace",
-			p:    &KeyValuePairsImpl{},
+			p:    &Commands{},
 			args: args{
 				e:     &e,
 				cache: "TestKeyValuePairs",
@@ -60,11 +60,11 @@ func TestKeyValuePairsImpl_Replace(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			gotOk, _, _, err := tt.p.Replace(tt.args.e, tt.args.cache, tt.args.key, tt.args.val, tt.args.val2, tt.args.destID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("KeyValuePairsImpl.Replace() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Commands.Replace() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if gotOk != tt.wantOk {
-				t.Errorf("KeyValuePairsImpl.Replace() gotOk = %v, want %v", gotOk, tt.wantOk)
+				t.Errorf("Commands.Replace() gotOk = %v, want %v", gotOk, tt.wantOk)
 			}
 		})
 	}

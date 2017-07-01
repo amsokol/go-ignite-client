@@ -8,7 +8,7 @@ import (
 
 // DestroyCache destroys cache with given name
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-destroy-cache for more details
-func (c *ManagementImpl) DestroyCache(e exec.Executer, cache string) (token string, err error) {
+func (c *Commands) DestroyCache(e exec.Executer, cache string) (token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "destcache")
 	if len(cache) > 0 {

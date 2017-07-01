@@ -6,12 +6,12 @@ import (
 	"github.com/amsokol/go-ignite-client/http/v1/exec"
 )
 
-func TestManagementImpl_DestroyCache(t *testing.T) {
+func TestCommands_DestroyCache(t *testing.T) {
 	t.Log("")
-	t.Log("Preparing test data for 'TestManagementImpl_DestroyCache'...")
+	t.Log("Preparing test data for 'TestCommands_DestroyCache'...")
 
 	e := exec.ExecuterImpl{Servers: []string{"http://localhost:8080/ignite"}, Username: "", Password: ""}
-	c := ManagementImpl{}
+	c := Commands{}
 
 	_, err := c.GetOrCreateCache(&e, "Cache4TestDestroyCache")
 	if err != nil {
@@ -26,7 +26,7 @@ func TestManagementImpl_DestroyCache(t *testing.T) {
 	}
 	tests := []struct {
 		name      string
-		c         *ManagementImpl
+		c         *Commands
 		args      args
 		wantToken string
 		wantErr   bool
@@ -44,7 +44,7 @@ func TestManagementImpl_DestroyCache(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := tt.c.DestroyCache(tt.args.e, tt.args.cache)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ManagementImpl.DestroyCache() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Commands.DestroyCache() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 		})

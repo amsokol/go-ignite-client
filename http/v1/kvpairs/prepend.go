@@ -11,7 +11,7 @@ import (
 
 // Prepend prepends a line for value which is associated with key
 // See https://apacheignite.readme.io/v1.9/docs/rest-api#section-prepend for more details
-func (p *KeyValuePairsImpl) Prepend(e exec.Executer, cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error) {
+func (p *Commands) Prepend(e exec.Executer, cache string, key string, val string, destID string) (ok bool, nodeID string, token string, err error) {
 	v := url.Values{}
 	v.Add("cmd", "prepend")
 	if len(cache) > 0 {
