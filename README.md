@@ -1,4 +1,4 @@
-# go-ignite-client
+# go-ignite-client DEPRECATED. See new repo: [ignite-go-client](https://github.com/amsokol/ignite-go-client)
 ## Apache Ignite (GridGain) go language native client and SQL driver
 
 ### Requirements:
